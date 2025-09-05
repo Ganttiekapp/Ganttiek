@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { supabase } from './supabaseClient'
 import SimpleGantt from './SimpleGantt'
 import TaskEditModal from './TaskEditModal'
@@ -153,8 +153,53 @@ export default function ProjectPage({ session, projectId, onBack }) {
     }
   }
 
+  // Sort tasks by dependencies (same logic as SimpleGantt)
+  const sortedTasks = useMemo(() => {
+    const sorted = []
+    const visited = new Set()
+    const visiting = new Set()
+
+    const visit = (task) => {
+      if (visiting.has(task.id)) {
+        // Circular dependency detected, just add the task
+        if (!visited.has(task.id)) {
+          sorted.push(task)
+          visited.add(task.id)
+        }
+        return
+      }
+      
+      if (visited.has(task.id)) return
+      
+      visiting.add(task.id)
+      
+      // Visit dependencies first
+      if (task.dependencies && task.dependencies.length > 0) {
+        task.dependencies.forEach(depId => {
+          const depTask = tasks.find(t => t.id === depId)
+          if (depTask) {
+            visit(depTask)
+          }
+        })
+      }
+      
+      visiting.delete(task.id)
+      sorted.push(task)
+      visited.add(task.id)
+    }
+
+    // Visit all tasks
+    tasks.forEach(task => {
+      if (!visited.has(task.id)) {
+        visit(task)
+      }
+    })
+
+    return sorted
+  }, [tasks])
+
   // Convert tasks to Gantt chart format
-  const ganttData = tasks.map(task => ({
+  const ganttData = sortedTasks.map(task => ({
     id: task.id,
     name: task.name,
     start: new Date(task.start_date),
@@ -296,7 +341,7 @@ export default function ProjectPage({ session, projectId, onBack }) {
       {showTasksList && (
         <div className="tasks-list">
           <h3>Tasks ({tasks.length})</h3>
-        {tasks.map(task => {
+        {sortedTasks.map(task => {
           const dependencies = task.dependencies || []
           const dependencyTasks = tasks.filter(t => dependencies.includes(t.id))
           
