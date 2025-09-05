@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 export default function SimpleGantt({ data, onTaskChange, onTaskClick }) {
   const [viewMode, setViewMode] = useState('week')
@@ -77,6 +77,51 @@ export default function SimpleGantt({ data, onTaskChange, onTaskClick }) {
 
   const dependencyConnections = getDependencyConnections()
 
+  // Sort tasks so dependencies appear above dependent tasks
+  const sortedTasks = useMemo(() => {
+    const sorted = []
+    const visited = new Set()
+    const visiting = new Set()
+
+    const visit = (task) => {
+      if (visiting.has(task.id)) {
+        // Circular dependency detected, just add the task
+        if (!visited.has(task.id)) {
+          sorted.push(task)
+          visited.add(task.id)
+        }
+        return
+      }
+      
+      if (visited.has(task.id)) return
+      
+      visiting.add(task.id)
+      
+      // Visit dependencies first
+      if (task.dependencies && task.dependencies.length > 0) {
+        task.dependencies.forEach(depId => {
+          const depTask = data.find(t => t.id === depId)
+          if (depTask) {
+            visit(depTask)
+          }
+        })
+      }
+      
+      visiting.delete(task.id)
+      sorted.push(task)
+      visited.add(task.id)
+    }
+
+    // Visit all tasks
+    data.forEach(task => {
+      if (!visited.has(task.id)) {
+        visit(task)
+      }
+    })
+
+    return sorted
+  }, [data])
+
   return (
     <div className="simple-gantt">
       <div className="gantt-header">
@@ -108,7 +153,7 @@ export default function SimpleGantt({ data, onTaskChange, onTaskClick }) {
       <div className="gantt-content">
         <div className="gantt-sidebar">
           <div className="sidebar-header">Tasks</div>
-          {data.map(task => (
+          {sortedTasks.map(task => (
             <div 
               key={task.id} 
               className={`task-row ${selectedTask?.id === task.id ? 'selected' : ''}`}
@@ -149,8 +194,8 @@ export default function SimpleGantt({ data, onTaskChange, onTaskClick }) {
               {dependencyConnections.map((connection, index) => {
                 const fromPos = getTaskPosition(connection.from)
                 const toPos = getTaskPosition(connection.to)
-                const fromTaskIndex = data.findIndex(t => t.id === connection.from.id)
-                const toTaskIndex = data.findIndex(t => t.id === connection.to.id)
+                const fromTaskIndex = sortedTasks.findIndex(t => t.id === connection.from.id)
+                const toTaskIndex = sortedTasks.findIndex(t => t.id === connection.to.id)
                 
                 const fromY = (fromTaskIndex * 40) + 20 // Center of task bar
                 const toY = (toTaskIndex * 40) + 20
@@ -177,7 +222,7 @@ export default function SimpleGantt({ data, onTaskChange, onTaskClick }) {
               </defs>
             </svg>
             
-            {data.map(task => {
+            {sortedTasks.map(task => {
               const position = getTaskPosition(task)
               return (
                 <div 

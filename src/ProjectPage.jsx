@@ -9,6 +9,7 @@ export default function ProjectPage({ session, projectId, onBack }) {
   const [loading, setLoading] = useState(true)
   const [showTaskForm, setShowTaskForm] = useState(false)
   const [editingTask, setEditingTask] = useState(null)
+  const [showTasksList, setShowTasksList] = useState(false)
   const [newTask, setNewTask] = useState({
     name: '',
     description: '',
@@ -188,12 +189,20 @@ export default function ProjectPage({ session, projectId, onBack }) {
           <h1>{project.name}</h1>
           {project.description && <p>{project.description}</p>}
         </div>
-        <button 
-          className="button create-task-button"
-          onClick={() => setShowTaskForm(true)}
-        >
-          + Add Task
-        </button>
+        <div className="header-actions">
+          <button 
+            className="button toggle-tasks-button" 
+            onClick={() => setShowTasksList(!showTasksList)}
+          >
+            {showTasksList ? '📊 Hide Tasks' : '📋 Show Tasks'}
+          </button>
+          <button 
+            className="button create-task-button"
+            onClick={() => setShowTaskForm(true)}
+          >
+            + Add Task
+          </button>
+        </div>
       </div>
 
       {showTaskForm && (
@@ -284,8 +293,9 @@ export default function ProjectPage({ session, projectId, onBack }) {
         )}
       </div>
 
-      <div className="tasks-list">
-        <h3>Tasks ({tasks.length})</h3>
+      {showTasksList && (
+        <div className="tasks-list">
+          <h3>Tasks ({tasks.length})</h3>
         {tasks.map(task => {
           const dependencies = task.dependencies || []
           const dependencyTasks = tasks.filter(t => dependencies.includes(t.id))
@@ -330,7 +340,8 @@ export default function ProjectPage({ session, projectId, onBack }) {
             </div>
           )
         })}
-      </div>
+        </div>
+      )}
 
       <TaskEditModal
         task={editingTask}
