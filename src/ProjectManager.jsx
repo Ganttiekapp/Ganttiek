@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
 
-export default function ProjectManager({ session }) {
+export default function ProjectManager({ session, onOpenProject }) {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
@@ -157,7 +157,7 @@ export default function ProjectManager({ session }) {
               <div className="project-actions">
                 <button 
                   className="button small-button"
-                  onClick={() => {/* TODO: Open project */}}
+                  onClick={() => onOpenProject(project.id)}
                 >
                   Open
                 </button>

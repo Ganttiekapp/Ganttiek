@@ -1,12 +1,22 @@
 import { useState } from 'react'
 import { supabase } from './supabaseClient'
 import ProjectManager from './ProjectManager'
+import ProjectPage from './ProjectPage'
 
 export default function Account({ session }) {
   const [activeTab, setActiveTab] = useState('projects')
+  const [currentProjectId, setCurrentProjectId] = useState(null)
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
+  }
+
+  const handleOpenProject = (projectId) => {
+    setCurrentProjectId(projectId)
+  }
+
+  const handleBackToProjects = () => {
+    setCurrentProjectId(null)
   }
 
   const userName = session.user.user_metadata?.full_name || 
@@ -54,8 +64,17 @@ export default function Account({ session }) {
         </div>
 
         <div className="tab-content">
-          {activeTab === 'projects' ? (
-            <ProjectManager session={session} />
+          {currentProjectId ? (
+            <ProjectPage 
+              session={session} 
+              projectId={currentProjectId} 
+              onBack={handleBackToProjects}
+            />
+          ) : activeTab === 'projects' ? (
+            <ProjectManager 
+              session={session} 
+              onOpenProject={handleOpenProject}
+            />
           ) : (
             <div className="about-section">
               <h3>🚀 About Ganttiek</h3>
@@ -64,7 +83,8 @@ export default function Account({ session }) {
                 <h4>Features:</h4>
                 <ul>
                   <li>✅ Project creation and management</li>
-                  <li>🔄 Gantt chart visualization (coming soon)</li>
+                  <li>🔄 Gantt chart visualization with SVAR React</li>
+                  <li>📊 Task management and tracking</li>
                   <li>👥 Team collaboration (coming soon)</li>
                   <li>📱 Mobile-friendly interface</li>
                 </ul>
