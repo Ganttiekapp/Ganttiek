@@ -1,6 +1,10 @@
+import { useState } from 'react'
 import { supabase } from './supabaseClient'
+import ProjectManager from './ProjectManager'
 
 export default function Account({ session }) {
+  const [activeTab, setActiveTab] = useState('projects')
+
   const handleSignOut = async () => {
     await supabase.auth.signOut()
   }
@@ -34,9 +38,39 @@ export default function Account({ session }) {
           </div>
         </div>
 
-        <div className="coming-soon">
-          <h3>🚀 Coming Soon</h3>
-          <p>Gantt chart features, project management, and team collaboration tools are in development.</p>
+        <div className="tabs">
+          <button 
+            className={`tab-button ${activeTab === 'projects' ? 'active' : ''}`}
+            onClick={() => setActiveTab('projects')}
+          >
+            📊 My Projects
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'about' ? 'active' : ''}`}
+            onClick={() => setActiveTab('about')}
+          >
+            ℹ️ About
+          </button>
+        </div>
+
+        <div className="tab-content">
+          {activeTab === 'projects' ? (
+            <ProjectManager session={session} />
+          ) : (
+            <div className="about-section">
+              <h3>🚀 About Ganttiek</h3>
+              <p>Ganttiek is your waterfall task buddy, designed to help you manage projects with beautiful Gantt charts.</p>
+              <div className="features">
+                <h4>Features:</h4>
+                <ul>
+                  <li>✅ Project creation and management</li>
+                  <li>🔄 Gantt chart visualization (coming soon)</li>
+                  <li>👥 Team collaboration (coming soon)</li>
+                  <li>📱 Mobile-friendly interface</li>
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
 
         <button className="button sign-out-button" onClick={handleSignOut}>
