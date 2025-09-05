@@ -717,6 +717,154 @@
   color: #666;
 }
 
+/* Task Dependencies */
+.task-dependencies {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e1e5e9;
+}
+
+.task-dependencies strong {
+  font-size: 12px;
+  color: #666;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.dependency-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.dependency-tag {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  border: 1px solid #bbdefb;
+}
+
+.edit-button {
+  background: #17a2b8;
+}
+
+.edit-button:hover {
+  background: #138496;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.modal-close:hover {
+  background: #f8f9fa;
+}
+
+.modal-form {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.dependencies-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e1e5e9;
+  border-radius: 4px;
+  padding: 10px;
+  background: #f8f9fa;
+}
+
+.dependency-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e1e5e9;
+  cursor: pointer;
+}
+
+.dependency-item:last-child {
+  border-bottom: none;
+}
+
+.dependency-item input[type="checkbox"] {
+  margin: 0;
+}
+
+.dependency-name {
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+}
+
+.dependency-dates {
+  font-size: 11px;
+  color: #666;
+  font-style: italic;
+}
+
 .no-tasks {
   text-align: center;
   padding: 60px 20px;

@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
 import SimpleGantt from './SimpleGantt'
+import TaskEditModal from './TaskEditModal'
 
 export default function ProjectPage({ session, projectId, onBack }) {
   const [project, setProject] = useState(null)
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
   const [showTaskForm, setShowTaskForm] = useState(false)
+  const [editingTask, setEditingTask] = useState(null)
   const [newTask, setNewTask] = useState({
     name: '',
     description: '',
@@ -96,6 +98,35 @@ export default function ProjectPage({ session, projectId, onBack }) {
     } catch (error) {
       console.error('Error creating task:', error)
       alert('Error creating task: ' + error.message)
+    }
+  }
+
+  const updateTask = async (updatedTask) => {
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .update({
+          name: updatedTask.name,
+          description: updatedTask.description,
+          start_date: updatedTask.start_date,
+          end_date: updatedTask.end_date,
+          progress: updatedTask.progress,
+          dependencies: updatedTask.dependencies,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', updatedTask.id)
+        .eq('user_id', session.user.id)
+
+      if (error) {
+        console.error('Error updating task:', error)
+        alert('Error updating task: ' + error.message)
+      } else {
+        setTasks(tasks.map(t => t.id === updatedTask.id ? updatedTask : t))
+        setEditingTask(null)
+      }
+    } catch (error) {
+      console.error('Error updating task:', error)
+      alert('Error updating task: ' + error.message)
     }
   }
 
@@ -243,8 +274,10 @@ export default function ProjectPage({ session, projectId, onBack }) {
                 // TODO: Update task in database
               }}
               onTaskClick={(task) => {
-                console.log('Task clicked:', task)
-                // TODO: Show task details
+                const fullTask = tasks.find(t => t.id === task.id)
+                if (fullTask) {
+                  setEditingTask(fullTask)
+                }
               }}
             />
           </div>
@@ -253,28 +286,59 @@ export default function ProjectPage({ session, projectId, onBack }) {
 
       <div className="tasks-list">
         <h3>Tasks ({tasks.length})</h3>
-        {tasks.map(task => (
-          <div key={task.id} className="task-item">
-            <div className="task-info">
-              <h4>{task.name}</h4>
-              {task.description && <p>{task.description}</p>}
-              <div className="task-dates">
-                <span>Start: {new Date(task.start_date).toLocaleDateString()}</span>
-                <span>End: {new Date(task.end_date).toLocaleDateString()}</span>
-                <span>Progress: {task.progress}%</span>
+        {tasks.map(task => {
+          const dependencies = task.dependencies || []
+          const dependencyTasks = tasks.filter(t => dependencies.includes(t.id))
+          
+          return (
+            <div key={task.id} className="task-item">
+              <div className="task-info">
+                <h4>{task.name}</h4>
+                {task.description && <p>{task.description}</p>}
+                <div className="task-dates">
+                  <span>Start: {new Date(task.start_date).toLocaleDateString()}</span>
+                  <span>End: {new Date(task.end_date).toLocaleDateString()}</span>
+                  <span>Progress: {task.progress}%</span>
+                </div>
+                {dependencyTasks.length > 0 && (
+                  <div className="task-dependencies">
+                    <strong>Dependencies:</strong>
+                    <div className="dependency-tags">
+                      {dependencyTasks.map(dep => (
+                        <span key={dep.id} className="dependency-tag">
+                          {dep.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="task-actions">
+                <button 
+                  className="button small-button edit-button"
+                  onClick={() => setEditingTask(task)}
+                >
+                  Edit
+                </button>
+                <button 
+                  className="button small-button delete-button"
+                  onClick={() => deleteTask(task.id)}
+                >
+                  Delete
+                </button>
               </div>
             </div>
-            <div className="task-actions">
-              <button 
-                className="button small-button delete-button"
-                onClick={() => deleteTask(task.id)}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
+
+      <TaskEditModal
+        task={editingTask}
+        tasks={tasks}
+        isOpen={!!editingTask}
+        onClose={() => setEditingTask(null)}
+        onSave={updateTask}
+      />
     </div>
   )
 }

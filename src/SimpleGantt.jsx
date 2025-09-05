@@ -57,6 +57,26 @@ export default function SimpleGantt({ data, onTaskChange, onTaskClick }) {
     return '#28a745'
   }
 
+  const getDependencyConnections = () => {
+    const connections = []
+    data.forEach(task => {
+      if (task.dependencies && task.dependencies.length > 0) {
+        task.dependencies.forEach(depId => {
+          const depTask = data.find(t => t.id === depId)
+          if (depTask) {
+            connections.push({
+              from: depTask,
+              to: task
+            })
+          }
+        })
+      }
+    })
+    return connections
+  }
+
+  const dependencyConnections = getDependencyConnections()
+
   return (
     <div className="simple-gantt">
       <div className="gantt-header">
@@ -124,6 +144,39 @@ export default function SimpleGantt({ data, onTaskChange, onTaskClick }) {
           </div>
           
           <div className="timeline-content">
+            {/* Dependency connections */}
+            <svg className="dependency-connections" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+              {dependencyConnections.map((connection, index) => {
+                const fromPos = getTaskPosition(connection.from)
+                const toPos = getTaskPosition(connection.to)
+                const fromTaskIndex = data.findIndex(t => t.id === connection.from.id)
+                const toTaskIndex = data.findIndex(t => t.id === connection.to.id)
+                
+                const fromY = (fromTaskIndex * 40) + 20 // Center of task bar
+                const toY = (toTaskIndex * 40) + 20
+                const fromX = fromPos.left + fromPos.width
+                const toX = toPos.left
+                
+                return (
+                  <line
+                    key={index}
+                    x1={`${fromX}%`}
+                    y1={fromY}
+                    x2={`${toX}%`}
+                    y2={toY}
+                    stroke="#dc3545"
+                    strokeWidth="2"
+                    markerEnd="url(#arrowhead)"
+                  />
+                )
+              })}
+              <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#dc3545" />
+                </marker>
+              </defs>
+            </svg>
+            
             {data.map(task => {
               const position = getTaskPosition(task)
               return (
