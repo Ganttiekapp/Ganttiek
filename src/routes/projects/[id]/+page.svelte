@@ -20,30 +20,35 @@
 
   // Transform tasks for Gantt chart with automatic dependency positioning
   $: ganttTasks = (() => {
-    const transformedTasks = tasks.map(task => ({
-      id: task.id,
-      name: task.name,
-      description: task.description || '',
-      startDate: new Date(task.start_date),
-      endDate: new Date(task.end_date),
-      progress: task.progress || 0,
-      status: task.status || 'todo',
-      priority: task.priority || 'medium',
-      resourceId: null,
-      parentId: null,
-      children: [],
-      dependencies: task.dependencies || [],
-      milestones: [],
-      isCritical: false,
-      slack: 0,
-      earlyStart: new Date(task.start_date),
-      earlyFinish: new Date(task.end_date),
-      lateStart: new Date(task.start_date),
-      lateFinish: new Date(task.end_date),
-      createdAt: new Date(task.created_at),
-      updatedAt: new Date(task.updated_at),
-      customFields: {}
-    }));
+    const transformedTasks = tasks.map(task => {
+      // Extract dependency IDs from the database format
+      const dependencyIds = task.dependencies ? task.dependencies.map(dep => dep.depends_on_task_id) : [];
+      
+      return {
+        id: task.id,
+        name: task.name,
+        description: task.description || '',
+        startDate: new Date(task.start_date),
+        endDate: new Date(task.end_date),
+        progress: task.progress || 0,
+        status: task.status || 'todo',
+        priority: task.priority || 'medium',
+        resourceId: null,
+        parentId: null,
+        children: [],
+        dependencies: dependencyIds,
+        milestones: [],
+        isCritical: false,
+        slack: 0,
+        earlyStart: new Date(task.start_date),
+        earlyFinish: new Date(task.end_date),
+        lateStart: new Date(task.start_date),
+        lateFinish: new Date(task.end_date),
+        createdAt: new Date(task.created_at),
+        updatedAt: new Date(task.updated_at),
+        customFields: {}
+      };
+    });
 
     // Auto-position dependent tasks to start the day after their parent tasks
     transformedTasks.forEach(task => {
@@ -86,10 +91,10 @@
     const deps = [];
     tasks.forEach(task => {
       if (task.dependencies && task.dependencies.length > 0) {
-        task.dependencies.forEach(depId => {
+        task.dependencies.forEach(dep => {
           deps.push({
-            id: `${task.id}-${depId}`,
-            from: depId,
+            id: dep.id || `${task.id}-${dep.depends_on_task_id}`,
+            from: dep.depends_on_task_id,
             to: task.id,
             type: 'finish-to-start',
             lag: 0
@@ -218,12 +223,31 @@
         end_date: newTask.end_date || new Date().toISOString().split('T')[0]
       };
 
+      // Remove dependencies from taskData as they'll be handled separately
+      delete taskData.dependencies;
+
       const { data, error: createError } = await ProjectService.createTask(taskData);
       
       if (createError) {
         error = createError.message;
       } else {
-        tasks = [...tasks, data];
+        // Save dependencies if any
+        if (newTask.dependencies && newTask.dependencies.length > 0) {
+          const { error: depError } = await ProjectService.updateTaskDependencies(
+            data.id, 
+            newTask.dependencies, 
+            user.id
+          );
+          
+          if (depError) {
+            console.error('Failed to save dependencies:', depError);
+            // Don't fail the entire operation, just log the error
+          }
+        }
+
+        // Reload tasks to get the updated data with dependencies
+        await loadProject();
+        
         newTask = {
           name: '',
           description: '',
@@ -296,6 +320,10 @@
   function startEditTask(task) {
     console.log('🍌 Starting edit for task:', task.id, task.name);
     editingTaskId = task.id;
+    
+    // Extract dependency IDs from the database format
+    const dependencyIds = task.dependencies ? task.dependencies.map(dep => dep.depends_on_task_id) : [];
+    
     editingTask = {
       name: task.name || '',
       description: task.description || '',
@@ -304,7 +332,7 @@
       priority: task.priority || 'medium',
       status: task.status || 'todo',
       progress: task.progress || 0,
-      dependencies: task.dependencies || []
+      dependencies: dependencyIds
     };
     validationErrors = {};
     error = '';
@@ -366,7 +394,23 @@
       if (updateError) {
         error = updateError.message;
       } else {
-        tasks = tasks.map(t => t.id === editingTaskId ? data : t);
+        // Update dependencies if they changed
+        if (editingTask.dependencies) {
+          const { error: depError } = await ProjectService.updateTaskDependencies(
+            editingTaskId, 
+            editingTask.dependencies, 
+            user.id
+          );
+          
+          if (depError) {
+            console.error('Failed to update dependencies:', depError);
+            // Don't fail the entire operation, just log the error
+          }
+        }
+
+        // Reload tasks to get the updated data with dependencies
+        await loadProject();
+        
         cancelEditTask();
         success = 'Task updated successfully!';
         setTimeout(() => success = '', 3000);

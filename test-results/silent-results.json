@@ -65,20 +65,20 @@
   },
   "suites": [
     {
-      "title": "gantt-dependencies.spec.js",
-      "file": "gantt-dependencies.spec.js",
+      "title": "database-relationship-fix.spec.js",
+      "file": "database-relationship-fix.spec.js",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Gantt Chart Dependencies",
-          "file": "gantt-dependencies.spec.js",
+          "title": "Database Relationship Fix",
+          "file": "database-relationship-fix.spec.js",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should verify dependency arrows are rendered",
+              "title": "should verify database queries work without relationship errors",
               "ok": true,
               "tags": [],
               "tests": [
@@ -93,22 +93,28 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 950,
+                      "duration": 844,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "✅ Found 3 dependency paths\n"
+                          "text": "✅ Gantt container loaded successfully\n"
                         },
                         {
-                          "text": "✅ Found 3 dependency arrows\n"
+                          "text": "✅ SVG chart is present\n"
                         },
                         {
-                          "text": "📊 Total dependency elements: 6\n"
+                          "text": "✅ Found 3 dependencies\n"
+                        },
+                        {
+                          "text": "✅ Database relationship fix is working correctly!\n"
+                        },
+                        {
+                          "text": "✅ No relationship errors detected\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-09-06T17:49:49.460Z",
+                      "startTime": "2025-09-06T18:06:50.354Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -116,9 +122,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "4cfab5e6f3cf4e48e790-eed92d29d3e9673ec8e1",
-              "file": "gantt-dependencies.spec.js",
-              "line": 92,
+              "id": "1b93a8edc3747a5ebcb4-f5582ba38eec70f76307",
+              "file": "database-relationship-fix.spec.js",
+              "line": 4,
               "column": 3
             }
           ]
@@ -128,8 +134,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-09-06T17:49:49.118Z",
-    "duration": 1470.8359999999998,
+    "startTime": "2025-09-06T18:06:49.929Z",
+    "duration": 1561.851,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

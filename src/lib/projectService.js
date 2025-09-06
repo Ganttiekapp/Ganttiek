@@ -55,14 +55,40 @@ export class ProjectService {
   }
 
   static async getProjectTasks(projectId, userId) {
-    const { data, error } = await supabase
+    // First, get the tasks
+    const { data: tasks, error: tasksError } = await supabase
       .from('tasks')
       .select('*')
       .eq('project_id', projectId)
       .eq('user_id', userId)
       .order('start_date', { ascending: true });
     
-    return { data, error };
+    if (tasksError) {
+      return { data: null, error: tasksError };
+    }
+    
+    if (!tasks || tasks.length === 0) {
+      return { data: [], error: null };
+    }
+    
+    // Then, get the dependencies for these tasks
+    const taskIds = tasks.map(task => task.id);
+    const { data: dependencies, error: depsError } = await supabase
+      .from('task_dependencies')
+      .select('*')
+      .in('task_id', taskIds);
+    
+    if (depsError) {
+      return { data: null, error: depsError };
+    }
+    
+    // Combine tasks with their dependencies
+    const tasksWithDependencies = tasks.map(task => ({
+      ...task,
+      dependencies: dependencies?.filter(dep => dep.task_id === task.id) || []
+    }));
+    
+    return { data: tasksWithDependencies, error: null };
   }
 
   static async getAllTasks(userId) {
