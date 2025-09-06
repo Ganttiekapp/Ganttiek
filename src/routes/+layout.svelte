@@ -3,6 +3,7 @@
   import { AuthService } from '$lib/auth.js';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
+  import Navigation from '$lib/components/Navigation.svelte';
   import '../app.css';
 
   let user = null;
@@ -36,6 +37,7 @@
       <p>Loading...</p>
     </div>
   {:else if user}
+    <Navigation {user} />
     <slot />
   {:else}
     <slot />

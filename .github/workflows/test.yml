@@ -24,6 +24,15 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     
+    - name: Set up test environment variables
+      run: |
+        echo "VITE_SUPABASE_URL=https://test-project.supabase.co" >> $GITHUB_ENV
+        echo "VITE_SUPABASE_ANON_KEY=test-anon-key-for-testing-only" >> $GITHUB_ENV
+        echo "VITE_APP_URL=http://localhost:5173" >> $GITHUB_ENV
+    
+    - name: Test environment configuration
+      run: npm run test:env
+    
     - name: Run Playwright tests (headless)
       run: npm run test:headless
     

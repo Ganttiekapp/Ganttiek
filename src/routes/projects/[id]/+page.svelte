@@ -17,6 +17,8 @@
     description: '',
     start_date: '',
     end_date: '',
+    priority: 'medium',
+    status: 'todo',
     progress: 0
   };
 
@@ -90,6 +92,8 @@
           description: '',
           start_date: '',
           end_date: '',
+          priority: 'medium',
+          status: 'todo',
           progress: 0
         };
         showTaskForm = false;
@@ -102,7 +106,7 @@
 
   async function updateTaskProgress(taskId, progress) {
     try {
-      const { data, error: updateError } = await ProjectService.updateTask(taskId, { progress }, user.id);
+      const { data, error: updateError } = await ProjectService.updateTaskProgress(taskId, progress, user.id);
       
       if (updateError) {
         error = updateError.message;
@@ -111,6 +115,20 @@
       }
     } catch (err) {
       error = 'Failed to update task';
+    }
+  }
+
+  async function toggleTaskComplete(task) {
+    try {
+      const { data, error: updateError } = await ProjectService.toggleTaskComplete(task.id, user.id);
+      
+      if (updateError) {
+        error = updateError.message;
+      } else {
+        tasks = tasks.map(t => t.id === task.id ? data : t);
+      }
+    } catch (err) {
+      error = 'Failed to toggle task completion';
     }
   }
 
@@ -125,7 +143,7 @@
       if (deleteError) {
         error = deleteError.message;
       } else {
-        tasks = tasks.filter(task => task.id !== taskId);
+        tasks = tasks.filter(t => t.id !== taskId);
       }
     } catch (err) {
       error = 'Failed to delete task';
@@ -135,6 +153,29 @@
   function formatDate(dateString) {
     if (!dateString) return 'Not set';
     return new Date(dateString).toLocaleDateString();
+  }
+
+  function getPriorityColor(priority) {
+    switch (priority) {
+      case 'high': return '#dc3545';
+      case 'medium': return '#ffc107';
+      case 'low': return '#28a745';
+      default: return '#6c757d';
+    }
+  }
+
+  function getStatusColor(status) {
+    switch (status) {
+      case 'completed': return '#28a745';
+      case 'in_progress': return '#007bff';
+      case 'todo': return '#6c757d';
+      default: return '#6c757d';
+    }
+  }
+
+  function isOverdue(task) {
+    if (!task.end_date || task.progress === 100) return false;
+    return new Date(task.end_date) < new Date();
   }
 
   function getProjectStatus(project) {
@@ -149,14 +190,6 @@
     return 'In progress';
   }
 
-  function getStatusColor(status) {
-    switch (status) {
-      case 'Completed': return '#28a745';
-      case 'In progress': return '#007bff';
-      case 'Not started': return '#6c757d';
-      default: return '#6c757d';
-    }
-  }
 </script>
 
 <svelte:head>

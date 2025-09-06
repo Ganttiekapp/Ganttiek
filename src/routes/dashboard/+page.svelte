@@ -6,6 +6,8 @@
 
   let user = null;
   let projects = [];
+  let tasks = [];
+  let overdueTasks = [];
   let loading = true;
 
   onMount(async () => {
@@ -18,12 +20,25 @@
 
   async function loadProjects() {
     try {
-      const { data, error } = await ProjectService.getProjects(user.id);
-      if (!error) {
-        projects = data || [];
+      const [projectsResult, tasksResult, overdueResult] = await Promise.all([
+        ProjectService.getProjects(user.id),
+        ProjectService.getAllTasks(user.id),
+        ProjectService.getOverdueTasks(user.id)
+      ]);
+      
+      if (!projectsResult.error) {
+        projects = projectsResult.data || [];
+      }
+      
+      if (!tasksResult.error) {
+        tasks = tasksResult.data || [];
+      }
+      
+      if (!overdueResult.error) {
+        overdueTasks = overdueResult.data || [];
       }
     } catch (err) {
-      console.error('Failed to load projects:', err);
+      console.error('Failed to load data:', err);
     }
   }
 
@@ -47,6 +62,24 @@
     if (now < start) return 'Not started';
     if (now > end) return 'Completed';
     return 'In progress';
+  }
+
+  function getTaskStats() {
+    const total = tasks.length;
+    const completed = tasks.filter(t => t.progress === 100).length;
+    const inProgress = tasks.filter(t => t.progress > 0 && t.progress < 100).length;
+    const todo = tasks.filter(t => t.progress === 0).length;
+    
+    return { total, completed, inProgress, todo };
+  }
+
+  function getPriorityColor(priority) {
+    switch (priority) {
+      case 'high': return '#dc3545';
+      case 'medium': return '#ffc107';
+      case 'low': return '#28a745';
+      default: return '#6c757d';
+    }
   }
 
   function getStatusColor(status) {
@@ -92,6 +125,18 @@
         <div class="stat-card">
           <h3>Completed Projects</h3>
           <div class="stat-number">{projects.filter(p => getProjectStatus(p) === 'Completed').length}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Total Tasks</h3>
+          <div class="stat-number">{getTaskStats().total}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Completed Tasks</h3>
+          <div class="stat-number">{getTaskStats().completed}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Overdue Tasks</h3>
+          <div class="stat-number overdue">{overdueTasks.length}</div>
         </div>
       </div>
 
@@ -147,6 +192,62 @@
         {/if}
       </div>
 
+      <!-- Task Management Section -->
+      <div class="dashboard-section">
+        <div class="section-header">
+          <h2>Task Management</h2>
+          <div class="section-actions">
+            <button on:click={() => goto('/tasks')} class="btn btn-primary">
+              View All Tasks
+            </button>
+          </div>
+        </div>
+
+        {#if overdueTasks.length > 0}
+          <div class="overdue-alert">
+            <h3>⚠️ Overdue Tasks ({overdueTasks.length})</h3>
+            <div class="overdue-tasks">
+              {#each overdueTasks.slice(0, 3) as task (task.id)}
+                <div class="overdue-task">
+                  <div class="task-info">
+                    <h4>{task.name}</h4>
+                    <p>Due: {formatDate(task.end_date)} • {task.projects?.name || 'No Project'}</p>
+                  </div>
+                  <div class="task-priority" style="background-color: {getPriorityColor(task.priority)}">
+                    {task.priority}
+                  </div>
+                </div>
+              {/each}
+            </div>
+            {#if overdueTasks.length > 3}
+              <p class="more-tasks">... and {overdueTasks.length - 3} more overdue tasks</p>
+            {/if}
+          </div>
+        {/if}
+
+        {#if tasks.length > 0}
+          <div class="recent-tasks">
+            <h3>Recent Tasks</h3>
+            <div class="tasks-list">
+              {#each tasks.slice(0, 5) as task (task.id)}
+                <div class="task-item">
+                  <div class="task-content">
+                    <h4 class="{task.progress === 100 ? 'completed' : ''}">{task.name}</h4>
+                    <p>{task.projects?.name || 'No Project'} • {formatDate(task.end_date)}</p>
+                  </div>
+                  <div class="task-meta">
+                    <span class="priority" style="background-color: {getPriorityColor(task.priority)}">
+                      {task.priority}
+                    </span>
+                    <span class="progress">{task.progress}%</span>
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+        {/if}
+      </div>
+
       <div class="dashboard-grid">
         <div class="card">
           <h2>Quick Actions</h2>
@@ -154,6 +255,7 @@
           <div class="quick-actions">
             <button on:click={() => goto('/projects/new')} class="btn btn-primary">Create Project</button>
             <button on:click={() => goto('/projects')} class="btn btn-secondary">View All Projects</button>
+            <button on:click={() => goto('/tasks')} class="btn btn-secondary">Manage Tasks</button>
           </div>
         </div>
 
@@ -253,6 +355,10 @@
     font-size: 2rem;
     font-weight: 700;
     color: #007bff;
+  }
+
+  .stat-number.overdue {
+    color: #dc3545;
   }
 
   .dashboard-section {
@@ -447,5 +553,122 @@
 
   .btn-secondary:hover {
     background-color: #545b62;
+  }
+
+  /* Task Management Styles */
+  .overdue-alert {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .overdue-alert h3 {
+    color: #721c24;
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+  }
+
+  .overdue-tasks {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .overdue-task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    border-left: 4px solid #dc3545;
+  }
+
+  .task-info h4 {
+    margin: 0 0 0.25rem 0;
+    color: #333;
+    font-size: 1rem;
+  }
+
+  .task-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .task-priority {
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+
+  .more-tasks {
+    margin: 1rem 0 0 0;
+    color: #721c24;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .recent-tasks h3 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-size: 1.1rem;
+  }
+
+  .tasks-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    border-left: 4px solid #e9ecef;
+  }
+
+  .task-content h4 {
+    margin: 0 0 0.25rem 0;
+    color: #333;
+    font-size: 1rem;
+  }
+
+  .task-content h4.completed {
+    text-decoration: line-through;
+    color: #6c757d;
+  }
+
+  .task-content p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .task-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .priority {
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+
+  .progress {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
   }
 </style>

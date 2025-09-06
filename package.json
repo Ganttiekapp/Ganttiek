@@ -10,6 +10,7 @@
     "test": "playwright test",
     "test:silent": "playwright test --config=playwright.silent.config.js",
     "test:run": "node run-tests.js",
+    "test:env": "node test-env.js",
     "test:headless": "playwright test --project=webkit",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
