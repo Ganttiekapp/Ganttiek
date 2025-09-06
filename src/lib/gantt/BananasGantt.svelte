@@ -513,6 +513,8 @@
   <!-- Toolbar -->
   {#if showToolbar}
     <div class="gantt-toolbar">
+      <!-- Zoom buttons disabled -->
+      <!--
       <div class="toolbar-section">
         <button class="toolbar-btn" on:click={handleZoomIn} title="Zoom In">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -530,6 +532,7 @@
           </svg>
         </button>
       </div>
+      -->
       
       <div class="toolbar-section">
         <button 
@@ -616,9 +619,12 @@
       <span>Dependencies: {engine?.getDependencies().length || 0}</span>
       <span>Critical Path: {engine?.getCriticalPath().length || 0}</span>
     </div>
+    <!-- Zoom status disabled -->
+    <!--
     <div class="status-zoom">
       <span>Zoom: {Math.round(currentZoom * 100)}%</span>
     </div>
+    -->
   </div>
 </div>
 

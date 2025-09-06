@@ -651,52 +651,14 @@ export class GanttRenderer {
       }
     });
     
-    // Enhanced wheel zoom with better control
+    // Disable wheel zoom - only allow panning
     this.svg.addEventListener('wheel', (event) => {
-      event.preventDefault();
-      
-      // Get mouse position relative to SVG
-      const rect = this.svg.getBoundingClientRect();
-      const mouseX = event.clientX - rect.left;
-      const mouseY = event.clientY - rect.top;
-      
-      // Calculate zoom factor
-      const delta = event.deltaY > 0 ? 0.9 : 1.1;
-      const oldZoom = this.zoom;
-      this.zoom *= delta;
-      this.zoom = Math.max(0.1, Math.min(5, this.zoom));
-      
-      // Zoom towards mouse position
-      if (this.zoom !== oldZoom) {
-        const zoomRatio = this.zoom / oldZoom;
-        this.panX = mouseX - (mouseX - this.panX) * zoomRatio;
-        this.panY = mouseY - (mouseY - this.panY) * zoomRatio;
-        this.updateTransform();
-      }
+      // Allow normal page scrolling instead of zooming
+      // Don't prevent default to allow page scroll
     });
     
-    // Add keyboard shortcuts for zoom
-    document.addEventListener('keydown', (event) => {
-      if (this.svg.contains(document.activeElement) || event.ctrlKey) {
-        if (event.key === '+' || event.key === '=') {
-          event.preventDefault();
-          this.zoom *= 1.1;
-          this.zoom = Math.min(5, this.zoom);
-          this.updateTransform();
-        } else if (event.key === '-') {
-          event.preventDefault();
-          this.zoom *= 0.9;
-          this.zoom = Math.max(0.1, this.zoom);
-          this.updateTransform();
-        } else if (event.key === '0') {
-          event.preventDefault();
-          this.zoom = 1;
-          this.panX = 0;
-          this.panY = 0;
-          this.updateTransform();
-        }
-      }
-    });
+    // Disable keyboard zoom shortcuts
+    // Removed keyboard zoom functionality
   }
   
   updateTransform() {

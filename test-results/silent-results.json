@@ -65,20 +65,20 @@
   },
   "suites": [
     {
-      "title": "gantt-zoom-fix.spec.js",
-      "file": "gantt-zoom-fix.spec.js",
+      "title": "gantt-zoom-disabled.spec.js",
+      "file": "gantt-zoom-disabled.spec.js",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Gantt Chart Zoom and Layout Fix",
-          "file": "gantt-zoom-fix.spec.js",
+          "title": "Gantt Chart Zoom Disabled",
+          "file": "gantt-zoom-disabled.spec.js",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should verify task section appears before timeline",
+              "title": "should verify zoom functionality is disabled",
               "ok": true,
               "tags": [],
               "tests": [
@@ -93,16 +93,28 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 844,
+                      "duration": 1266,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "✅ Layout structure is correct\n"
+                          "text": "✅ Zoom buttons are disabled\n"
+                        },
+                        {
+                          "text": "✅ Zoom status is hidden\n"
+                        },
+                        {
+                          "text": "✅ Wheel events are allowed for normal page scrolling\n"
+                        },
+                        {
+                          "text": "📊 Chart dimensions: 1200x600px\n"
+                        },
+                        {
+                          "text": "✅ Gantt chart zoom is successfully disabled!\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-09-06T17:35:37.467Z",
+                      "startTime": "2025-09-06T17:37:23.816Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -110,9 +122,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "1bce96d10cf293ed65eb-ed13137e831d685b118a",
-              "file": "gantt-zoom-fix.spec.js",
-              "line": 85,
+              "id": "6d54633d1780dc51b300-bd2338ce197b837cc73b",
+              "file": "gantt-zoom-disabled.spec.js",
+              "line": 4,
               "column": 3
             }
           ]
@@ -122,8 +134,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-09-06T17:35:37.129Z",
-    "duration": 1360.8780000000002,
+    "startTime": "2025-09-06T17:37:23.363Z",
+    "duration": 2045.689,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

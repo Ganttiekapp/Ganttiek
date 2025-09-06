@@ -729,7 +729,7 @@
         <div class="gantt-section">
           <h2>Project Timeline</h2>
           <p class="gantt-info">Showing {ganttTasks.length} tasks in Gantt chart</p>
-          <p class="gantt-help">💡 Right-click on tasks to edit, delete, or add dependencies</p>
+          <p class="gantt-help">💡 Right-click on tasks to edit, delete, or add dependencies. Right-click and drag to pan around the chart.</p>
           <BananasGantt 
             tasks={ganttTasks}
             dependencies={[]}
