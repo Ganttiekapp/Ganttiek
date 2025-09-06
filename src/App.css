@@ -110,7 +110,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
   z-index: 999;
   display: flex;
   justify-content: flex-end;
@@ -125,7 +126,8 @@
   display: flex;
   flex-direction: column;
   animation: slideIn 0.3s ease;
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.2);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .menu-header {
@@ -155,22 +157,26 @@
 }
 
 .menu-item {
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 15px 20px;
   text-align: left;
   font-size: 1rem;
   color: #333;
   cursor: pointer;
   border-radius: 8px;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .menu-item:hover {
-  background: #f5f5f5;
+  background: rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .menu-item.sign-out {
@@ -178,10 +184,14 @@
   margin-top: auto;
   border-top: 1px solid #eee;
   padding-top: 20px;
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .menu-item.sign-out:hover {
-  background: #fef2f2;
+  background: rgba(220, 53, 69, 0.1);
+  border-color: rgba(220, 53, 69, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
 }
 
 /* Main Content */
