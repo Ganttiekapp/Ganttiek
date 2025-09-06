@@ -262,6 +262,36 @@
     error = '';
   }
 
+  // Handle task editing from Gantt chart
+  function handleGanttTaskEdit(event) {
+    const taskId = event.taskId;
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      editingTaskId = taskId;
+      editingTask = {
+        name: task.name,
+        description: task.description || '',
+        start_date: task.start_date,
+        end_date: task.end_date,
+        priority: task.priority || 'medium',
+        status: task.status || 'todo',
+        progress: task.progress || 0,
+        dependencies: task.dependencies || []
+      };
+      showTaskForm = true;
+      validationErrors = {};
+      success = '';
+      // Load available parent tasks for this specific task
+      loadAvailableParentTasks(task.id);
+    }
+  }
+
+  // Handle task deletion from Gantt chart
+  async function handleGanttTaskDelete(event) {
+    const taskId = event.taskId;
+    await deleteTask(taskId);
+  }
+
   async function saveEditTask() {
     if (!validateTaskForm(editingTask)) {
       error = 'Please fix the validation errors below';
@@ -421,6 +451,7 @@
         <div class="gantt-section">
           <h2>Project Timeline</h2>
           <p class="gantt-info">Showing {ganttTasks.length} tasks in Gantt chart</p>
+          <p class="gantt-help">💡 Right-click on tasks to edit, delete, or add dependencies</p>
           <BananasGantt 
             tasks={ganttTasks}
             dependencies={[]}
@@ -437,6 +468,8 @@
             on:taskClick={(event) => console.log('Task clicked:', event.detail)}
             on:taskUpdated={(event) => console.log('Task updated:', event.detail)}
             on:dependencyCreated={(event) => console.log('Dependency created:', event.detail)}
+            on:editTask={(event) => handleGanttTaskEdit(event.detail)}
+            on:taskDeleted={(event) => handleGanttTaskDelete(event.detail)}
           />
         </div>
       {:else if tasks && tasks.length === 0}
@@ -1190,10 +1223,20 @@
   }
 
   .gantt-info {
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 0.5rem 0;
     color: #6b7280;
     font-size: 0.9rem;
     font-style: italic;
+  }
+
+  .gantt-help {
+    margin: 0 0 1.5rem 0;
+    color: #059669;
+    font-size: 0.85rem;
+    background: #ecfdf5;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border-left: 3px solid #10b981;
   }
 
   .no-tasks-message {

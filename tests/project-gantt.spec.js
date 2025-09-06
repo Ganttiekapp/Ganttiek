@@ -85,4 +85,5 @@ test.describe('Project Page Gantt Chart', () => {
     console.log('✅ Gantt chart appears correctly when tasks exist');
     console.log(`📊 Chart dimensions: ${svgBox.width}x${svgBox.height}px`);
   });
+
 });
