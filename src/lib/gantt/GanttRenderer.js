@@ -620,8 +620,10 @@ export class GanttRenderer {
     let startX = 0;
     let startY = 0;
     
+    // Enable panning with right mouse button or middle mouse button
     this.svg.addEventListener('mousedown', (event) => {
-      if (event.button === 1) { // Middle mouse button
+      if (event.button === 1 || event.button === 2) { // Middle or right mouse button
+        event.preventDefault();
         isPanning = true;
         startX = event.clientX - this.panX;
         startY = event.clientY - this.panY;
@@ -642,12 +644,58 @@ export class GanttRenderer {
       this.svg.style.cursor = 'default';
     });
     
+    // Prevent context menu on right click
+    this.svg.addEventListener('contextmenu', (event) => {
+      if (isPanning) {
+        event.preventDefault();
+      }
+    });
+    
+    // Enhanced wheel zoom with better control
     this.svg.addEventListener('wheel', (event) => {
       event.preventDefault();
+      
+      // Get mouse position relative to SVG
+      const rect = this.svg.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+      
+      // Calculate zoom factor
       const delta = event.deltaY > 0 ? 0.9 : 1.1;
+      const oldZoom = this.zoom;
       this.zoom *= delta;
       this.zoom = Math.max(0.1, Math.min(5, this.zoom));
-      this.updateTransform();
+      
+      // Zoom towards mouse position
+      if (this.zoom !== oldZoom) {
+        const zoomRatio = this.zoom / oldZoom;
+        this.panX = mouseX - (mouseX - this.panX) * zoomRatio;
+        this.panY = mouseY - (mouseY - this.panY) * zoomRatio;
+        this.updateTransform();
+      }
+    });
+    
+    // Add keyboard shortcuts for zoom
+    document.addEventListener('keydown', (event) => {
+      if (this.svg.contains(document.activeElement) || event.ctrlKey) {
+        if (event.key === '+' || event.key === '=') {
+          event.preventDefault();
+          this.zoom *= 1.1;
+          this.zoom = Math.min(5, this.zoom);
+          this.updateTransform();
+        } else if (event.key === '-') {
+          event.preventDefault();
+          this.zoom *= 0.9;
+          this.zoom = Math.max(0.1, this.zoom);
+          this.updateTransform();
+        } else if (event.key === '0') {
+          event.preventDefault();
+          this.zoom = 1;
+          this.panX = 0;
+          this.panY = 0;
+          this.updateTransform();
+        }
+      }
     });
   }
   

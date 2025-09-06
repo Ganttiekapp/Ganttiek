@@ -65,20 +65,20 @@
   },
   "suites": [
     {
-      "title": "gantt-edit-form-fix.spec.js",
-      "file": "gantt-edit-form-fix.spec.js",
+      "title": "gantt-zoom-fix.spec.js",
+      "file": "gantt-zoom-fix.spec.js",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Gantt Chart Edit Form Fix",
-          "file": "gantt-edit-form-fix.spec.js",
+          "title": "Gantt Chart Zoom and Layout Fix",
+          "file": "gantt-zoom-fix.spec.js",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should verify edit form opens when editTask event is triggered",
+              "title": "should verify task section appears before timeline",
               "ok": true,
               "tags": [],
               "tests": [
@@ -93,25 +93,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1086,
+                      "duration": 844,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "✅ EditTask event dispatched for task: task-1\n"
-                        },
-                        {
-                          "text": "✅ Context menu has edit option\n"
-                        },
-                        {
-                          "text": "📋 Available menu items: [\n  \u001b[32m'Edit Task'\u001b[39m,\n  \u001b[32m'Delete Task'\u001b[39m,\n  \u001b[32m'Add Dependency'\u001b[39m,\n  \u001b[32m'Duplicate Task'\u001b[39m,\n  \u001b[32m'Set as Milestone'\u001b[39m\n]\n"
-                        },
-                        {
-                          "text": "✅ Gantt chart edit form fix is working!\n"
+                          "text": "✅ Layout structure is correct\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-09-06T17:27:21.956Z",
+                      "startTime": "2025-09-06T17:35:37.467Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -119,9 +110,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "decc0d9d858dcb44d6a5-0ad5a31da80e1f43874b",
-              "file": "gantt-edit-form-fix.spec.js",
-              "line": 4,
+              "id": "1bce96d10cf293ed65eb-ed13137e831d685b118a",
+              "file": "gantt-zoom-fix.spec.js",
+              "line": 85,
               "column": 3
             }
           ]
@@ -131,8 +122,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-09-06T17:27:21.532Z",
-    "duration": 1733.9910000000002,
+    "startTime": "2025-09-06T17:35:37.129Z",
+    "duration": 1360.8780000000002,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

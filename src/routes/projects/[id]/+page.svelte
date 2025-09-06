@@ -442,39 +442,6 @@
         </div>
       </div>
 
-      <!-- Bananas Gantt Chart Section -->
-      {#if ganttTasks && ganttTasks.length > 0}
-        <div class="gantt-section">
-          <h2>Project Timeline</h2>
-          <p class="gantt-info">Showing {ganttTasks.length} tasks in Gantt chart</p>
-          <p class="gantt-help">💡 Right-click on tasks to edit, delete, or add dependencies</p>
-          <BananasGantt 
-            tasks={ganttTasks}
-            dependencies={[]}
-            resources={[]}
-            theme="default"
-            width={1200}
-            height={600}
-            enableInteractions={true}
-            showCriticalPath={true}
-            showDependencies={true}
-            showProgress={true}
-            enableExport={true}
-            enableUndoRedo={true}
-            on:taskClick={(event) => console.log('Task clicked:', event.detail)}
-            on:taskUpdated={(event) => console.log('Task updated:', event.detail)}
-            on:dependencyCreated={(event) => console.log('Dependency created:', event.detail)}
-            on:editTask={(event) => handleGanttTaskEdit(event.detail)}
-            on:taskDeleted={(event) => handleGanttTaskDelete(event.detail)}
-          />
-        </div>
-      {:else if tasks && tasks.length === 0}
-        <div class="gantt-section">
-          <h2>Project Timeline</h2>
-          <p class="no-tasks-message">No tasks yet. Create some tasks to see the Gantt chart.</p>
-        </div>
-      {/if}
-
       <div class="tasks-section">
         <h2>Tasks ({tasks.length})</h2>
         
@@ -756,6 +723,39 @@
           </div>
         {/if}
       </div>
+
+      <!-- Bananas Gantt Chart Section -->
+      {#if ganttTasks && ganttTasks.length > 0}
+        <div class="gantt-section">
+          <h2>Project Timeline</h2>
+          <p class="gantt-info">Showing {ganttTasks.length} tasks in Gantt chart</p>
+          <p class="gantt-help">💡 Right-click on tasks to edit, delete, or add dependencies</p>
+          <BananasGantt 
+            tasks={ganttTasks}
+            dependencies={[]}
+            resources={[]}
+            theme="default"
+            width={1200}
+            height={600}
+            enableInteractions={true}
+            showCriticalPath={true}
+            showDependencies={true}
+            showProgress={true}
+            enableExport={true}
+            enableUndoRedo={true}
+            on:taskClick={(event) => console.log('Task clicked:', event.detail)}
+            on:taskUpdated={(event) => console.log('Task updated:', event.detail)}
+            on:dependencyCreated={(event) => console.log('Dependency created:', event.detail)}
+            on:editTask={(event) => handleGanttTaskEdit(event.detail)}
+            on:taskDeleted={(event) => handleGanttTaskDelete(event.detail)}
+          />
+        </div>
+      {:else if tasks && tasks.length === 0}
+        <div class="gantt-section">
+          <h2>Project Timeline</h2>
+          <p class="no-tasks-message">No tasks yet. Create some tasks to see the Gantt chart.</p>
+        </div>
+      {/if}
     {/if}
   </main>
 </div>
