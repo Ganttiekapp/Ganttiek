@@ -29,26 +29,32 @@ describe('Account Component', () => {
     vi.clearAllMocks()
   })
 
-  it('renders account page with welcome message', () => {
+  it('renders account page with hamburger menu', () => {
     render(<Account session={mockSession} />)
     
+    // Check that the hamburger menu and brand are present
     expect(screen.getByText('Ganttiek')).toBeInTheDocument()
-    expect(screen.getByText('Your waterfall task buddy :)')).toBeInTheDocument()
-    expect(screen.getByText('Welcome back, Test User!')).toBeInTheDocument()
+    expect(screen.getByLabelText('Toggle menu')).toBeInTheDocument()
   })
 
-  it('displays user email', () => {
+  it('displays user email in menu', () => {
     render(<Account session={mockSession} />)
     
-    expect(screen.getByText('Email: test@example.com')).toBeInTheDocument()
+    // Open hamburger menu to see the user email
+    const hamburgerMenu = screen.getByLabelText('Toggle menu')
+    fireEvent.click(hamburgerMenu)
+    
+    expect(screen.getByText('test@example.com')).toBeInTheDocument()
   })
 
-  it('displays user avatar when available', () => {
+  it('displays user welcome message in menu', () => {
     render(<Account session={mockSession} />)
     
-    const avatar = screen.getByAltText('Profile')
-    expect(avatar).toBeInTheDocument()
-    expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg')
+    // Open hamburger menu to see the welcome message
+    const hamburgerMenu = screen.getByLabelText('Toggle menu')
+    fireEvent.click(hamburgerMenu)
+    
+    expect(screen.getByText('Welcome, Test User!')).toBeInTheDocument()
   })
 
   it('uses username when full_name is not available', () => {
@@ -65,7 +71,11 @@ describe('Account Component', () => {
     
     render(<Account session={sessionWithUsername} />)
     
-    expect(screen.getByText('Welcome back, testuser!')).toBeInTheDocument()
+    // Open hamburger menu to see the welcome message
+    const hamburgerMenu = screen.getByLabelText('Toggle menu')
+    fireEvent.click(hamburgerMenu)
+    
+    expect(screen.getByText('Welcome, testuser!')).toBeInTheDocument()
   })
 
   it('uses email prefix when no name is available', () => {
@@ -79,98 +89,71 @@ describe('Account Component', () => {
     
     render(<Account session={sessionWithEmailOnly} />)
     
-    expect(screen.getByText('Welcome back, test!')).toBeInTheDocument()
+    // Open hamburger menu to see the welcome message
+    const hamburgerMenu = screen.getByLabelText('Toggle menu')
+    fireEvent.click(hamburgerMenu)
+    
+    expect(screen.getByText('Welcome, test!')).toBeInTheDocument()
   })
 
-  it('renders tabs for Projects and About', () => {
+  it('renders menu items in desktop menu', () => {
     render(<Account session={mockSession} />)
     
+    // Desktop menu items should be visible by default
     expect(screen.getByText('📊 My Projects')).toBeInTheDocument()
-    expect(screen.getByText('ℹ️ About')).toBeInTheDocument()
+    expect(screen.getByText('🚪 Sign Out')).toBeInTheDocument()
   })
 
-  it('shows Projects tab by default', () => {
+  it('shows Projects content by default', () => {
     render(<Account session={mockSession} />)
     
-    const projectsTab = screen.getByText('📊 My Projects')
-    expect(projectsTab).toHaveClass('active')
+    // Should show ProjectManager content by default
+    expect(screen.getByText('My Projects')).toBeInTheDocument()
   })
 
-  it('switches to About tab when clicked', async () => {
+  it('opens and closes hamburger menu', async () => {
     const user = userEvent.setup()
     render(<Account session={mockSession} />)
     
-    const aboutTab = screen.getByText('ℹ️ About')
-    await user.click(aboutTab)
+    const hamburgerMenu = screen.getByLabelText('Toggle menu')
     
-    expect(aboutTab).toHaveClass('active')
-    expect(screen.getByText('🚀 About Ganttiek')).toBeInTheDocument()
+    // Open menu
+    await user.click(hamburgerMenu)
+    expect(screen.getByText('Welcome, Test User!')).toBeInTheDocument()
+    
+    // Close menu by clicking overlay
+    const overlay = document.querySelector('.menu-overlay')
+    await user.click(overlay)
+    expect(screen.queryByText('Welcome, Test User!')).not.toBeInTheDocument()
   })
 
-  it('shows About content when About tab is active', async () => {
-    const user = userEvent.setup()
+  it('renders ProjectManager component by default', () => {
     render(<Account session={mockSession} />)
     
-    const aboutTab = screen.getByText('ℹ️ About')
-    await user.click(aboutTab)
-    
-    expect(screen.getByText('🚀 About Ganttiek')).toBeInTheDocument()
-    expect(screen.getByText('Ganttiek is your waterfall task buddy, designed to help you manage projects with beautiful Gantt charts.')).toBeInTheDocument()
-    expect(screen.getByText('Features:')).toBeInTheDocument()
-    expect(screen.getByText('✅ Project creation and management')).toBeInTheDocument()
-    expect(screen.getByText('🔄 Gantt chart visualization with SVAR React')).toBeInTheDocument()
-  })
-
-  it('renders ProjectManager component when Projects tab is active', () => {
-    render(<Account session={mockSession} />)
-    
-    // ProjectManager should be rendered (we can't easily test its content without mocking it)
-    expect(screen.getByText('📊 My Projects')).toHaveClass('active')
+    // ProjectManager should be rendered by default
+    expect(screen.getByText('My Projects')).toBeInTheDocument()
   })
 
   it('calls signOut when sign out button is clicked', async () => {
     const user = userEvent.setup()
     render(<Account session={mockSession} />)
     
-    const signOutButton = screen.getByText('Sign Out')
+    // Click the desktop sign out button
+    const signOutButton = screen.getByText('🚪 Sign Out')
     await user.click(signOutButton)
     
     expect(supabase.auth.signOut).toHaveBeenCalled()
   })
 
-  it('handles navigation to project page', async () => {
+  it('navigates to projects when desktop menu item is clicked', async () => {
     const user = userEvent.setup()
     render(<Account session={mockSession} />)
     
-    // This test would need to mock the ProjectManager component
-    // and test the onOpenProject callback
-    expect(screen.getByText('📊 My Projects')).toBeInTheDocument()
-  })
-
-  it('handles back navigation from project page', async () => {
-    const user = userEvent.setup()
-    render(<Account session={mockSession} />)
+    // Click on My Projects desktop menu item
+    const projectsMenuItem = screen.getByText('📊 My Projects')
+    await user.click(projectsMenuItem)
     
-    // This test would need to mock the ProjectPage component
-    // and test the onBack callback
-    expect(screen.getByText('📊 My Projects')).toBeInTheDocument()
-  })
-
-  it('resets to Projects tab when switching tabs', async () => {
-    const user = userEvent.setup()
-    render(<Account session={mockSession} />)
-    
-    // Switch to About tab
-    const aboutTab = screen.getByText('ℹ️ About')
-    await user.click(aboutTab)
-    
-    expect(aboutTab).toHaveClass('active')
-    
-    // Switch back to Projects tab
-    const projectsTab = screen.getByText('📊 My Projects')
-    await user.click(projectsTab)
-    
-    expect(projectsTab).toHaveClass('active')
-    expect(aboutTab).not.toHaveClass('active')
+    // Should show projects content
+    expect(screen.getByText('My Projects')).toBeInTheDocument()
   })
 })

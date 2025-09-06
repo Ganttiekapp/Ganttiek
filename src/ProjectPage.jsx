@@ -227,9 +227,6 @@ export default function ProjectPage({ session, projectId, onBack }) {
   return (
     <div className="project-page">
       <div className="project-header">
-        <button className="button back-button" onClick={onBack}>
-          ← Back to Projects
-        </button>
         <div className="project-title">
           <h1>{project.name}</h1>
           {project.description && <p>{project.description}</p>}
