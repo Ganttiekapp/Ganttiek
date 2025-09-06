@@ -25,8 +25,8 @@
     return () => subscription.unsubscribe();
   });
 
-  // Redirect to login if not authenticated and not on login/signup page
-  $: if (!loading && !user && $page.url.pathname !== '/login' && $page.url.pathname !== '/signup') {
+  // Redirect to login if not authenticated and not on login/signup/demo page
+  $: if (!loading && !user && $page.url.pathname !== '/login' && $page.url.pathname !== '/signup' && $page.url.pathname !== '/gantt-demo') {
     goto('/login');
   }
 </script>

@@ -66,55 +66,151 @@ export class ProjectService {
   }
 
   static async getAllTasks(userId) {
+    // For now, use the fallback method directly to avoid join issues
+    // This ensures the method works regardless of foreign key setup
+    return await this.getAllTasksFallback(userId);
+  }
+
+  static async getAllTasksFallback(userId) {
+    try {
+      // Fetch tasks without join
+      const { data: tasksData, error: tasksError } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+      
+      if (tasksError) {
+        console.error('Failed to fetch tasks:', tasksError);
+        return { data: null, error: tasksError };
+      }
+      
+      if (!tasksData || tasksData.length === 0) {
+        return { data: [], error: null };
+      }
+      
+      // Get unique project IDs
+      const projectIds = [...new Set(tasksData.map(task => task.project_id).filter(Boolean))];
+      
+      if (projectIds.length === 0) {
+        // No project IDs, return tasks as-is
+        return { data: tasksData, error: null };
+      }
+      
+      // Fetch projects
+      const { data: projectsData, error: projectsError } = await supabase
+        .from('projects')
+        .select('id, name')
+        .in('id', projectIds);
+      
+      if (projectsError) {
+        console.warn('Failed to fetch projects, returning tasks without project info:', projectsError);
+        return { data: tasksData, error: null }; // Return tasks without project info
+      }
+      
+      // Combine the data
+      const enrichedTasks = tasksData.map(task => ({
+        ...task,
+        projects: projectsData?.find(project => project.id === task.project_id) || null
+      }));
+      
+      return { data: enrichedTasks, error: null };
+    } catch (err) {
+      console.error('Error in getAllTasksFallback:', err);
+      return { data: null, error: err };
+    }
+  }
+
+  // Simple method to get tasks without any joins - for debugging
+  static async getTasksOnly(userId) {
     const { data, error } = await supabase
       .from('tasks')
-      .select(`
-        *,
-        projects (
-          id,
-          name
-        )
-      `)
+      .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
     
     return { data, error };
   }
 
+  // Helper method to enrich tasks with project data
+  static async enrichTasksWithProjects(tasksData) {
+    if (!tasksData || tasksData.length === 0) {
+      return tasksData;
+    }
+    
+    try {
+      // Get unique project IDs
+      const projectIds = [...new Set(tasksData.map(task => task.project_id).filter(Boolean))];
+      
+      if (projectIds.length === 0) {
+        return tasksData;
+      }
+      
+      // Fetch projects
+      const { data: projectsData, error: projectsError } = await supabase
+        .from('projects')
+        .select('id, name')
+        .in('id', projectIds);
+      
+      if (projectsError) {
+        console.warn('Failed to fetch projects for enrichment:', projectsError);
+        return tasksData; // Return tasks without project info
+      }
+      
+      // Combine the data
+      return tasksData.map(task => ({
+        ...task,
+        projects: projectsData?.find(project => project.id === task.project_id) || null
+      }));
+    } catch (err) {
+      console.error('Error enriching tasks with projects:', err);
+      return tasksData; // Return tasks without project info
+    }
+  }
+
   static async getTasksByStatus(userId, status) {
-    const { data, error } = await supabase
+    // Use fallback approach to avoid join issues
+    const { data: tasksData, error: tasksError } = await supabase
       .from('tasks')
-      .select(`
-        *,
-        projects (
-          id,
-          name
-        )
-      `)
+      .select('*')
       .eq('user_id', userId)
       .eq('status', status)
-      .order('due_date', { ascending: true });
+      .order('end_date', { ascending: true });
     
-    return { data, error };
+    if (tasksError) {
+      return { data: null, error: tasksError };
+    }
+    
+    // Enrich with project data if available
+    if (tasksData && tasksData.length > 0) {
+      const enrichedTasks = await this.enrichTasksWithProjects(tasksData);
+      return { data: enrichedTasks, error: null };
+    }
+    
+    return { data: tasksData, error: null };
   }
 
   static async getOverdueTasks(userId) {
     const today = new Date().toISOString().split('T')[0];
-    const { data, error } = await supabase
+    const { data: tasksData, error: tasksError } = await supabase
       .from('tasks')
-      .select(`
-        *,
-        projects (
-          id,
-          name
-        )
-      `)
+      .select('*')
       .eq('user_id', userId)
       .lt('end_date', today)
       .neq('progress', 100)
       .order('end_date', { ascending: true });
     
-    return { data, error };
+    if (tasksError) {
+      return { data: null, error: tasksError };
+    }
+    
+    // Enrich with project data if available
+    if (tasksData && tasksData.length > 0) {
+      const enrichedTasks = await this.enrichTasksWithProjects(tasksData);
+      return { data: enrichedTasks, error: null };
+    }
+    
+    return { data: tasksData, error: null };
   }
 
   static async createTask(taskData) {
@@ -123,7 +219,6 @@ export class ProjectService {
       ...taskData,
       status: taskData.status || 'todo',
       priority: taskData.priority || 'medium',
-      due_date: taskData.end_date || taskData.due_date,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
@@ -178,20 +273,24 @@ export class ProjectService {
   }
 
   static async getTask(taskId, userId) {
-    const { data, error } = await supabase
+    const { data: taskData, error: taskError } = await supabase
       .from('tasks')
-      .select(`
-        *,
-        projects (
-          id,
-          name
-        )
-      `)
+      .select('*')
       .eq('id', taskId)
       .eq('user_id', userId)
       .single();
     
-    return { data, error };
+    if (taskError) {
+      return { data: null, error: taskError };
+    }
+    
+    // Enrich with project data if available
+    if (taskData) {
+      const enrichedTasks = await this.enrichTasksWithProjects([taskData]);
+      return { data: enrichedTasks[0], error: null };
+    }
+    
+    return { data: taskData, error: null };
   }
 
   static async deleteTask(taskId, userId) {

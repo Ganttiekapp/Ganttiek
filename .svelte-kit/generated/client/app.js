@@ -12,7 +12,8 @@ export const nodes = [
 	() => import('./nodes/8'),
 	() => import('./nodes/9'),
 	() => import('./nodes/10'),
-	() => import('./nodes/11')
+	() => import('./nodes/11'),
+	() => import('./nodes/12')
 ];
 
 export const server_loads = [];
@@ -20,14 +21,15 @@ export const server_loads = [];
 export const dictionary = {
 		"/": [2],
 		"/dashboard": [3],
-		"/login": [4],
-		"/projects": [5],
-		"/projects/new": [8],
-		"/projects/[id]": [6],
-		"/projects/[id]/edit": [7],
-		"/signup": [9],
-		"/tasks": [10],
-		"/tasks/[id]": [11]
+		"/gantt-demo": [4],
+		"/login": [5],
+		"/projects": [6],
+		"/projects/new": [9],
+		"/projects/[id]": [7],
+		"/projects/[id]/edit": [8],
+		"/signup": [10],
+		"/tasks": [11],
+		"/tasks/[id]": [12]
 	};
 
 export const hooks = {

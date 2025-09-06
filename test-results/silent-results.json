@@ -46,7 +46,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 30000
       }
     ],
     "shard": null,
@@ -65,25 +65,25 @@
   },
   "suites": [
     {
-      "title": "basic.spec.js",
-      "file": "basic.spec.js",
+      "title": "bananas-gantt.spec.js",
+      "file": "bananas-gantt.spec.js",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Basic Functionality",
-          "file": "basic.spec.js",
+          "title": "Bananas Gantt Chart Component",
+          "file": "bananas-gantt.spec.js",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should load home page",
+              "title": "should load login page without errors",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 15000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "webkit-silent",
@@ -93,12 +93,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 642,
+                      "duration": 2831,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-09-06T11:02:55.108Z",
+                      "startTime": "2025-09-06T14:33:42.447Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -106,9 +106,1062 @@
                   "status": "expected"
                 }
               ],
-              "id": "39a4afdb91042e108afb-a1d7804d6405e180e4eb",
-              "file": "basic.spec.js",
-              "line": 6,
+              "id": "7a28d16293cfdf10d669-b9c6e45c75975269f3de",
+              "file": "bananas-gantt.spec.js",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "should login and navigate to projects",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10782,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:57:16",
+                        "location": {
+                          "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                          "column": 16,
+                          "line": 57
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 55 |\u001b[39m     \n \u001b[90m 56 |\u001b[39m     \u001b[90m// Wait for navigation\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 57 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 58 |\u001b[39m     \n \u001b[90m 59 |\u001b[39m     \u001b[90m// Check if projects page loads\u001b[39m\n \u001b[90m 60 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Projects'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                            "column": 16,
+                            "line": 57
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 55 |\u001b[39m     \n \u001b[90m 56 |\u001b[39m     \u001b[90m// Wait for navigation\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 57 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 58 |\u001b[39m     \n \u001b[90m 59 |\u001b[39m     \u001b[90m// Check if projects page loads\u001b[39m\n \u001b[90m 60 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Projects'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:57:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:33:45.426Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mario/Developer/Gattiekapp/Gattiek/test-results/bananas-gantt-Bananas-Gant-34b76-in-and-navigate-to-projects-webkit-silent/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                        "column": 16,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "7a28d16293cfdf10d669-ee1e1055deb94984fa04",
+              "file": "bananas-gantt.spec.js",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "should create a project and navigate to project page",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10860,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:67:16",
+                        "location": {
+                          "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                          "column": 16,
+                          "line": 67
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"email\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'test@example.com'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m     \n \u001b[90m 69 |\u001b[39m     \u001b[90m// Create a new project\u001b[39m\n \u001b[90m 70 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Create New Project\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                            "column": 16,
+                            "line": 67
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"email\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'test@example.com'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m     \n \u001b[90m 69 |\u001b[39m     \u001b[90m// Create a new project\u001b[39m\n \u001b[90m 70 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Create New Project\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:67:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:33:56.495Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mario/Developer/Gattiekapp/Gattiek/test-results/bananas-gantt-Bananas-Gant-bdaba-nd-navigate-to-project-page-webkit-silent/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                        "column": 16,
+                        "line": 67
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "7a28d16293cfdf10d669-d7209da6dc9036c07dec",
+              "file": "bananas-gantt.spec.js",
+              "line": 63,
+              "column": 3
+            },
+            {
+              "title": "should create tasks and display Gantt chart",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10864,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:86:16",
+                        "location": {
+                          "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                          "column": 16,
+                          "line": 86
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 84 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"email\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'test@example.com'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 85 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 86 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 87 |\u001b[39m     \n \u001b[90m 88 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Create New Project\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 89 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"name\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Gantt Test Project'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                            "column": 16,
+                            "line": 86
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 84 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"email\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'test@example.com'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 85 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 86 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 87 |\u001b[39m     \n \u001b[90m 88 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Create New Project\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 89 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"name\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Gantt Test Project'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:86:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:34:07.779Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mario/Developer/Gattiekapp/Gattiek/test-results/bananas-gantt-Bananas-Gant-00679-sks-and-display-Gantt-chart-webkit-silent/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                        "column": 16,
+                        "line": 86
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "7a28d16293cfdf10d669-c445e3ddcd42b6ea1b9c",
+              "file": "bananas-gantt.spec.js",
+              "line": 82,
+              "column": 3
+            },
+            {
+              "title": "should handle Gantt chart interactions",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10846,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:121:16",
+                        "location": {
+                          "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                          "column": 16,
+                          "line": 121
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"email\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'test@example.com'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m     \n \u001b[90m 123 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Create New Project\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 124 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"name\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Interactive Gantt Test'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                            "column": 16,
+                            "line": 121
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"email\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'test@example.com'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m     \n \u001b[90m 123 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Create New Project\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 124 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"name\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Interactive Gantt Test'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:121:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:34:19.062Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mario/Developer/Gattiekapp/Gattiek/test-results/bananas-gantt-Bananas-Gant-4a0c0-le-Gantt-chart-interactions-webkit-silent/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                        "column": 16,
+                        "line": 121
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "7a28d16293cfdf10d669-2d8d665c85096e62a4ab",
+              "file": "bananas-gantt.spec.js",
+              "line": 117,
+              "column": 3
+            },
+            {
+              "title": "should handle Gantt chart errors gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10855,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:170:16",
+                        "location": {
+                          "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                          "column": 16,
+                          "line": 170
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 168 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"email\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'test@example.com'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 169 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 170 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 171 |\u001b[39m     \n \u001b[90m 172 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Create New Project\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 173 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"name\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Error Test Project'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                            "column": 16,
+                            "line": 170
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 168 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"email\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'test@example.com'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 169 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 170 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 171 |\u001b[39m     \n \u001b[90m 172 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Create New Project\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 173 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"name\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Error Test Project'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:170:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:34:30.317Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mario/Developer/Gattiekapp/Gattiek/test-results/bananas-gantt-Bananas-Gant-6da8a-ntt-chart-errors-gracefully-webkit-silent/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                        "column": 16,
+                        "line": 170
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "7a28d16293cfdf10d669-4c561eea8817b358d374",
+              "file": "bananas-gantt.spec.js",
+              "line": 166,
+              "column": 3
+            },
+            {
+              "title": "should export Gantt chart",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10855,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:212:16",
+                        "location": {
+                          "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                          "column": 16,
+                          "line": 212
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 210 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"email\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'test@example.com'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 211 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 212 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 213 |\u001b[39m     \n \u001b[90m 214 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Create New Project\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 215 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"name\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Export Test Project'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                            "column": 16,
+                            "line": 212
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"/projects\" until \"load\"\n============================================================\n\n\u001b[0m \u001b[90m 210 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"email\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'test@example.com'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 211 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 212 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'/projects'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 213 |\u001b[39m     \n \u001b[90m 214 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Create New Project\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 215 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[name=\"name\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'Export Test Project'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js:212:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:34:41.581Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mario/Developer/Gattiekapp/Gattiek/test-results/bananas-gantt-Bananas-Gant-9a932-t-should-export-Gantt-chart-webkit-silent/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/bananas-gantt.spec.js",
+                        "column": 16,
+                        "line": 212
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "7a28d16293cfdf10d669-ce50dbf6405b2c2b169c",
+              "file": "bananas-gantt.spec.js",
+              "line": 208,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "gantt-chart.spec.js",
+      "file": "gantt-chart.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "SVAR Gantt Chart Component",
+          "file": "gantt-chart.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load login page without errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 796,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:34:52.850Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d0b23d81c285cef39bcf-929388fcfb1adf894e2c",
+              "file": "gantt-chart.spec.js",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "should load projects page without errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 701,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:34:53.784Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d0b23d81c285cef39bcf-5b1dbc4cf0ce0e778593",
+              "file": "gantt-chart.spec.js",
+              "line": 19,
+              "column": 3
+            },
+            {
+              "title": "should load dashboard page without errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 699,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:34:54.492Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d0b23d81c285cef39bcf-a4eca988068057f2e715",
+              "file": "gantt-chart.spec.js",
+              "line": 30,
+              "column": 3
+            },
+            {
+              "title": "should have proper page structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 663,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:34:55.196Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d0b23d81c285cef39bcf-4ac7f9af932ebafca351",
+              "file": "gantt-chart.spec.js",
+              "line": 41,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "gantt-component.spec.js",
+      "file": "gantt-component.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Gantt Component Import Test",
+          "file": "gantt-component.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load page and check for Gantt component errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3688,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== ERRORS ===\n"
+                        },
+                        {
+                          "text": "=== WARNINGS ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:34:55.872Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5fc5da4c42d73c120224-377b9986f2990eddc7b5",
+              "file": "gantt-component.spec.js",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "should check for module import errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 799,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Import test result: {\n  success: \u001b[33mtrue\u001b[39m,\n  components: {\n    BananasGantt: \u001b[32m'function'\u001b[39m,\n    GanttEngine: \u001b[32m'function'\u001b[39m,\n    GanttRenderer: \u001b[32m'function'\u001b[39m,\n    GanttInteractions: \u001b[32m'function'\u001b[39m\n  }\n}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:34:59.567Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5fc5da4c42d73c120224-e71f1f6f87ca07f95250",
+              "file": "gantt-component.spec.js",
+              "line": 60,
+              "column": 3
+            },
+            {
+              "title": "should test Gantt engine creation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 663,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Engine test result: {\n  success: \u001b[33mtrue\u001b[39m,\n  engineCreated: \u001b[33mtrue\u001b[39m,\n  taskAdded: \u001b[33mtrue\u001b[39m,\n  tasksCount: \u001b[33m1\u001b[39m,\n  taskData: {\n    id: \u001b[32m'test-task'\u001b[39m,\n    name: \u001b[32m'Test Task'\u001b[39m,\n    description: \u001b[32m''\u001b[39m,\n    startDate: \u001b[35m2024-01-01T00:00:00.000Z\u001b[39m,\n    endDate: \u001b[35m2024-01-15T00:00:00.000Z\u001b[39m,\n    duration: \u001b[33m15\u001b[39m,\n    progress: \u001b[33m50\u001b[39m,\n    status: \u001b[32m'in_progress'\u001b[39m,\n    priority: \u001b[32m'medium'\u001b[39m,\n    resourceId: \u001b[1mnull\u001b[22m,\n    parentId: \u001b[1mnull\u001b[22m,\n    children: [],\n    dependencies: [],\n    milestones: [],\n    isCritical: \u001b[33mtrue\u001b[39m,\n    slack: \u001b[33m0\u001b[39m,\n    earlyStart: \u001b[35m2024-01-01T00:00:00.000Z\u001b[39m,\n    earlyFinish: \u001b[35m2024-01-19T00:00:00.000Z\u001b[39m,\n    lateStart: \u001b[35m2024-01-01T00:00:00.000Z\u001b[39m,\n    lateFinish: \u001b[35m2024-01-19T00:00:00.000Z\u001b[39m,\n    createdAt: \u001b[35m2025-09-06T14:35:01.027Z\u001b[39m,\n    updatedAt: \u001b[35m2025-09-06T14:35:01.027Z\u001b[39m,\n    customFields: {}\n  }\n}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:35:00.373Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5fc5da4c42d73c120224-bda153d77d2a6839cdea",
+              "file": "gantt-component.spec.js",
+              "line": 110,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "gantt-demo.spec.js",
+      "file": "gantt-demo.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Gantt Chart Demo Page",
+          "file": "gantt-demo.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load Gantt demo page and display chart",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 701,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Gantt demo page loaded successfully!\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:35:01.045Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6d2efaa7633e9ab2f32f-65f0b7d4e10e92c20c55",
+              "file": "gantt-demo.spec.js",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "should test Gantt chart interactions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6746,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Task bars not found or clickable\n"
+                        },
+                        {
+                          "text": "✅ Gantt chart interactions tested successfully!\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:35:01.752Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6d2efaa7633e9ab2f32f-de1e17167563c05bad5f",
+              "file": "gantt-demo.spec.js",
+              "line": 81,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "gantt-full-functionality.spec.js",
+      "file": "gantt-full-functionality.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Bananas Gantt Full Functionality Test",
+          "file": "gantt-full-functionality.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should test complete Gantt library functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 714,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Full functionality test result: {\n  success: \u001b[33mtrue\u001b[39m,\n  results: {\n    engineCreated: \u001b[33mtrue\u001b[39m,\n    tasksAdded: \u001b[33m4\u001b[39m,\n    dependenciesAdded: \u001b[33m3\u001b[39m,\n    resourcesAdded: \u001b[33m2\u001b[39m,\n    criticalPathCalculated: \u001b[33mfalse\u001b[39m,\n    taskUpdated: \u001b[33mtrue\u001b[39m,\n    dataExported: \u001b[33mtrue\u001b[39m,\n    rendererCreated: \u001b[33mtrue\u001b[39m,\n    interactionsCreated: \u001b[33mtrue\u001b[39m,\n    rendererError: \u001b[1mnull\u001b[22m,\n    interactionsError: \u001b[1mnull\u001b[22m,\n    timeline: {\n      start: \u001b[32m'2025-09-06T14:35:09.205Z'\u001b[39m,\n      end: \u001b[32m'2025-10-06T14:35:09.205Z'\u001b[39m,\n      totalDays: \u001b[33m30\u001b[39m\n    },\n    criticalPathTasks: [],\n    taskData: [ \u001b[36m[Object]\u001b[39m, \u001b[36m[Object]\u001b[39m, \u001b[36m[Object]\u001b[39m, \u001b[36m[Object]\u001b[39m ]\n  }\n}\n"
+                        },
+                        {
+                          "text": "✅ All Gantt functionality tests passed!\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:35:08.509Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "05706dd528e80bf0603f-03fc3ddc872bcade3a3d",
+              "file": "gantt-full-functionality.spec.js",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "should test Gantt data validation and error handling",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 687,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m4\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m4\u001b[39m\n    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/gantt-full-functionality.spec.js:328:39",
+                        "location": {
+                          "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/gantt-full-functionality.spec.js",
+                          "column": 39,
+                          "line": 328
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 326 |\u001b[39m     expect(validationTest\u001b[33m.\u001b[39msuccess)\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 327 |\u001b[39m     expect(validationTest\u001b[33m.\u001b[39mvalidTaskCreated)\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 328 |\u001b[39m     expect(validationTest\u001b[33m.\u001b[39mtotalTasks)\u001b[33m.\u001b[39mtoBe(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Only valid task should be added\u001b[39m\n \u001b[90m     |\u001b[39m                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 329 |\u001b[39m     \n \u001b[90m 330 |\u001b[39m     \u001b[90m// Check that invalid tasks were handled gracefully\u001b[39m\n \u001b[90m 331 |\u001b[39m     \u001b[36mconst\u001b[39m invalidResults \u001b[33m=\u001b[39m validationTest\u001b[33m.\u001b[39minvalidTaskResults\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/gantt-full-functionality.spec.js",
+                            "column": 39,
+                            "line": 328
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m4\u001b[39m\n\n\u001b[0m \u001b[90m 326 |\u001b[39m     expect(validationTest\u001b[33m.\u001b[39msuccess)\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 327 |\u001b[39m     expect(validationTest\u001b[33m.\u001b[39mvalidTaskCreated)\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 328 |\u001b[39m     expect(validationTest\u001b[33m.\u001b[39mtotalTasks)\u001b[33m.\u001b[39mtoBe(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Only valid task should be added\u001b[39m\n \u001b[90m     |\u001b[39m                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 329 |\u001b[39m     \n \u001b[90m 330 |\u001b[39m     \u001b[90m// Check that invalid tasks were handled gracefully\u001b[39m\n \u001b[90m 331 |\u001b[39m     \u001b[36mconst\u001b[39m invalidResults \u001b[33m=\u001b[39m validationTest\u001b[33m.\u001b[39minvalidTaskResults\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/mario/Developer/Gattiekapp/Gattiek/tests/gantt-full-functionality.spec.js:328:39\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Validation test result: {\n  success: \u001b[33mtrue\u001b[39m,\n  invalidTaskResults: [\n    { task: \u001b[32m'invalid-1'\u001b[39m, success: \u001b[33mtrue\u001b[39m, error: \u001b[1mnull\u001b[22m },\n    { task: \u001b[32m'invalid-2'\u001b[39m, success: \u001b[33mtrue\u001b[39m, error: \u001b[1mnull\u001b[22m },\n    { task: \u001b[32m'invalid-3'\u001b[39m, success: \u001b[33mtrue\u001b[39m, error: \u001b[1mnull\u001b[22m }\n  ],\n  validTaskCreated: \u001b[33mtrue\u001b[39m,\n  totalTasks: \u001b[33m4\u001b[39m\n}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:35:09.229Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mario/Developer/Gattiekapp/Gattiek/test-results/gantt-full-functionality-B-212e5-lidation-and-error-handling-webkit-silent/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mario/Developer/Gattiekapp/Gattiek/tests/gantt-full-functionality.spec.js",
+                        "column": 39,
+                        "line": 328
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "05706dd528e80bf0603f-4a896c9f6068f240d88b",
+              "file": "gantt-full-functionality.spec.js",
+              "line": 269,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "gantt-integration.spec.js",
+      "file": "gantt-integration.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Bananas Gantt Integration Test",
+          "file": "gantt-integration.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load project page with Gantt component without errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3823,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== ERRORS ===\n"
+                        },
+                        {
+                          "text": "=== WARNINGS ===\n"
+                        },
+                        {
+                          "text": "✅ Page loaded successfully without critical errors!\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:35:10.185Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "48e0fb1e99cee4439366-d116ad8c5541f9cf9e85",
+              "file": "gantt-integration.spec.js",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "should test Gantt component import in browser context",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 703,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Browser import test result: {\n  success: \u001b[33mtrue\u001b[39m,\n  components: {\n    BananasGantt: \u001b[32m'function'\u001b[39m,\n    GanttEngine: \u001b[32m'function'\u001b[39m,\n    GanttRenderer: \u001b[32m'function'\u001b[39m,\n    GanttInteractions: \u001b[32m'function'\u001b[39m\n  }\n}\n"
+                        },
+                        {
+                          "text": "✅ All Gantt components imported successfully in browser!\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:35:14.145Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "48e0fb1e99cee4439366-3c49e391a8fb8c8cb4f4",
+              "file": "gantt-integration.spec.js",
+              "line": 78,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "gantt-visibility.spec.js",
+      "file": "gantt-visibility.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Gantt Chart Visibility",
+          "file": "gantt-visibility.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should verify Gantt chart is actually visible and functional",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 679,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Gantt chart is visible and functional!\n"
+                        },
+                        {
+                          "text": "📊 Chart dimensions: 1200x600px\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:35:14.860Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b2760299999b33b5d82e-355c9e9c9dc02a979925",
+              "file": "gantt-visibility.spec.js",
+              "line": 4,
               "column": 3
             }
           ]
@@ -118,11 +1171,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-09-06T11:02:53.724Z",
-    "duration": 2359.705,
-    "expected": 1,
+    "startTime": "2025-09-06T14:33:42.131Z",
+    "duration": 93431.469,
+    "expected": 14,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 7,
     "flaky": 0
   }
 }

@@ -4,6 +4,7 @@
   import { AuthService } from '$lib/auth.js';
   import { ProjectService } from '$lib/projectService.js';
   import { goto } from '$app/navigation';
+  import { BananasGantt } from '$lib/gantt/index.js';
 
   let user = null;
   let project = null;
@@ -389,6 +390,29 @@
         </div>
       </div>
 
+      <!-- Bananas Gantt Chart Section -->
+      {#if tasks && tasks.length > 0}
+        <div class="gantt-section">
+          <BananasGantt 
+            {tasks}
+            dependencies={[]}
+            resources={[]}
+            theme="default"
+            width={1200}
+            height={600}
+            enableInteractions={true}
+            showCriticalPath={true}
+            showDependencies={true}
+            showProgress={true}
+            enableExport={true}
+            enableUndoRedo={true}
+            on:taskClick={(event) => console.log('Task clicked:', event.detail)}
+            on:taskUpdated={(event) => console.log('Task updated:', event.detail)}
+            on:dependencyCreated={(event) => console.log('Dependency created:', event.detail)}
+          />
+        </div>
+      {/if}
+
       <div class="tasks-section">
         <h2>Tasks ({tasks.length})</h2>
         
@@ -765,6 +789,15 @@
     font-weight: 600;
   }
 
+  .gantt-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin: 2rem 0;
+    overflow: hidden;
+  }
+
   .tasks-section h2 {
     color: #333;
     margin-bottom: 1.5rem;
@@ -999,9 +1032,7 @@
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
 
-  .task-edit-form .form-group input.error,
-  .task-edit-form .form-group select.error,
-  .task-edit-form .form-group textarea.error {
+  .task-edit-form .form-group input.error {
     border-color: #dc3545;
     box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
   }
