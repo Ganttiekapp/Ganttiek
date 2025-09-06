@@ -18,6 +18,32 @@
   let success = '';
   let availableParentTasks = [];
 
+  // Transform tasks for Gantt chart
+  $: ganttTasks = tasks.map(task => ({
+    id: task.id,
+    name: task.name,
+    description: task.description || '',
+    startDate: new Date(task.start_date),
+    endDate: new Date(task.end_date),
+    progress: task.progress || 0,
+    status: task.status || 'todo',
+    priority: task.priority || 'medium',
+    resourceId: null,
+    parentId: null,
+    children: [],
+    dependencies: [],
+    milestones: [],
+    isCritical: false,
+    slack: 0,
+    earlyStart: new Date(task.start_date),
+    earlyFinish: new Date(task.end_date),
+    lateStart: new Date(task.start_date),
+    lateFinish: new Date(task.end_date),
+    createdAt: new Date(task.created_at),
+    updatedAt: new Date(task.updated_at),
+    customFields: {}
+  }));
+
   let newTask = {
     name: '',
     description: '',
@@ -391,10 +417,12 @@
       </div>
 
       <!-- Bananas Gantt Chart Section -->
-      {#if tasks && tasks.length > 0}
+      {#if ganttTasks && ganttTasks.length > 0}
         <div class="gantt-section">
+          <h2>Project Timeline</h2>
+          <p class="gantt-info">Showing {ganttTasks.length} tasks in Gantt chart</p>
           <BananasGantt 
-            {tasks}
+            tasks={ganttTasks}
             dependencies={[]}
             resources={[]}
             theme="default"
@@ -410,6 +438,11 @@
             on:taskUpdated={(event) => console.log('Task updated:', event.detail)}
             on:dependencyCreated={(event) => console.log('Dependency created:', event.detail)}
           />
+        </div>
+      {:else if tasks && tasks.length === 0}
+        <div class="gantt-section">
+          <h2>Project Timeline</h2>
+          <p class="no-tasks-message">No tasks yet. Create some tasks to see the Gantt chart.</p>
         </div>
       {/if}
 
@@ -1136,6 +1169,42 @@
     border-radius: 1rem;
     font-size: 0.75rem;
     margin: 0.125rem;
+  }
+
+  .gantt-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .gantt-section h2 {
+    margin: 0 0 1rem 0;
+    color: #1f2937;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+  }
+
+  .gantt-info {
+    margin: 0 0 1.5rem 0;
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+
+  .no-tasks-message {
+    margin: 0;
+    padding: 2rem;
+    text-align: center;
+    color: #6b7280;
+    font-size: 1rem;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 2px dashed #d1d5db;
   }
 
   @media (max-width: 768px) {
