@@ -4,46 +4,27 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build": "vite build",
+    "dev": "vite dev",
     "preview": "vite preview",
-    "deploy": "npm run build && gh-pages -d dist",
-    "predeploy": "npm run build",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.57.0",
-    "lucide-react": "^0.542.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "react-router-dom": "^7.8.2"
+    "test": "playwright test",
+    "test:silent": "playwright test --config=playwright.silent.config.js",
+    "test:run": "node run-tests.js",
+    "test:headless": "playwright test --project=webkit",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:install": "playwright install"
   },
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
-    "@tailwindcss/postcss": "^4.1.13",
-    "@testing-library/jest-dom": "^6.8.0",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^24.3.1",
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
-    "@vitejs/plugin-react": "^5.0.0",
-    "autoprefixer": "^10.4.21",
-    "eslint": "^9.33.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.20",
-    "gh-pages": "^6.3.0",
-    "globals": "^16.3.0",
-    "jsdom": "^26.1.0",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.13",
-    "typescript": "~5.8.3",
-    "typescript-eslint": "^8.39.1",
-    "vite": "^7.1.2",
-    "vitest": "^3.2.4"
+    "@playwright/test": "^1.40.0",
+    "@sveltejs/adapter-auto": "^2.0.0",
+    "@sveltejs/kit": "^1.20.4",
+    "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "svelte": "^4.0.5",
+    "vite": "^4.4.2"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.4"
   }
 }

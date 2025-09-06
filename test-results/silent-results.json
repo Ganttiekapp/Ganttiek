@@ -1,0 +1,791 @@
+{
+  "config": {
+    "configFile": "/Users/mario/Developer/Gattiekapp/Gattiek/playwright.silent.config.js",
+    "rootDir": "/Users/mario/Developer/Gattiekapp/Gattiek/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/silent-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/mario/Developer/Gattiekapp/Gattiek/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit-silent",
+        "name": "webkit-silent",
+        "testDir": "/Users/mario/Developer/Gattiekapp/Gattiek/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 15000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true,
+      "timeout": 30000,
+      "stdout": "pipe",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "auth.spec.js",
+      "file": "auth.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Authentication",
+          "file": "auth.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display login page correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 368,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:19.856Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d5ed79a6b333c2ba7209-b6be9e64bfd19e56f8fa",
+              "file": "auth.spec.js",
+              "line": 6,
+              "column": 3
+            },
+            {
+              "title": "should display signup page correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 254,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:20.372Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d5ed79a6b333c2ba7209-2dc08ce7f223b7707527",
+              "file": "auth.spec.js",
+              "line": 22,
+              "column": 3
+            },
+            {
+              "title": "should have form validation on login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 258,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:20.632Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d5ed79a6b333c2ba7209-3def36e1eee0c97478dc",
+              "file": "auth.spec.js",
+              "line": 38,
+              "column": 3
+            },
+            {
+              "title": "should have form validation on signup",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 251,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:20.896Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d5ed79a6b333c2ba7209-fa7d154fe180ab4fec67",
+              "file": "auth.spec.js",
+              "line": 53,
+              "column": 3
+            },
+            {
+              "title": "should navigate between login and signup pages",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 294,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:21.154Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d5ed79a6b333c2ba7209-f49962659495e4d4dfb2",
+              "file": "auth.spec.js",
+              "line": 68,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "basic.spec.js",
+      "file": "basic.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Basic Functionality",
+          "file": "basic.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load home page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 229,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:21.458Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "39a4afdb91042e108afb-a1d7804d6405e180e4eb",
+              "file": "basic.spec.js",
+              "line": 6,
+              "column": 3
+            },
+            {
+              "title": "should navigate to login page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 228,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:21.694Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "39a4afdb91042e108afb-9440208fdbd682c1182b",
+              "file": "basic.spec.js",
+              "line": 16,
+              "column": 3
+            },
+            {
+              "title": "should navigate to signup page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 231,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:21.928Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "39a4afdb91042e108afb-189449ae0c067da8a1f5",
+              "file": "basic.spec.js",
+              "line": 26,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "projects.spec.js",
+      "file": "projects.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Project Management",
+          "file": "projects.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display projects page correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 226,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:22.168Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df3d005868b50a84764f-86ec3f369f8eba67d136",
+              "file": "projects.spec.js",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "should display create project page correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 224,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:22.400Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df3d005868b50a84764f-6b15d4e45b352fac7a7a",
+              "file": "projects.spec.js",
+              "line": 11,
+              "column": 3
+            },
+            {
+              "title": "should display dashboard correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 227,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:22.630Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df3d005868b50a84764f-ffcdbfbda5123fe63b7f",
+              "file": "projects.spec.js",
+              "line": 18,
+              "column": 3
+            },
+            {
+              "title": "should redirect to login when not authenticated",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 232,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:22.863Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df3d005868b50a84764f-b09db1207b19c6f5a438",
+              "file": "projects.spec.js",
+              "line": 25,
+              "column": 3
+            },
+            {
+              "title": "should have proper login page structure and styling",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 229,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:23.101Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df3d005868b50a84764f-5d08291c0439316a6239",
+              "file": "projects.spec.js",
+              "line": 37,
+              "column": 3
+            },
+            {
+              "title": "should handle form interactions correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 206,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:23.336Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df3d005868b50a84764f-fdfeb528db2b78d4c85b",
+              "file": "projects.spec.js",
+              "line": 52,
+              "column": 3
+            },
+            {
+              "title": "should handle form submission",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 225,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:23.547Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df3d005868b50a84764f-19bf72f2cdee4e7a909f",
+              "file": "projects.spec.js",
+              "line": 65,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "responsive.spec.js",
+      "file": "responsive.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Responsive Design",
+          "file": "responsive.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should work on mobile devices",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 230,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:23.787Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "68833bfb7a01a66a4f98-672398596e058a528f7e",
+              "file": "responsive.spec.js",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "should work on tablet devices",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 224,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:24.023Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "68833bfb7a01a66a4f98-40ae422e11a54ccc793f",
+              "file": "responsive.spec.js",
+              "line": 18,
+              "column": 3
+            },
+            {
+              "title": "should work on desktop devices",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 225,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:24.252Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "68833bfb7a01a66a4f98-b464ab5c12416a1adafe",
+              "file": "responsive.spec.js",
+              "line": 28,
+              "column": 3
+            },
+            {
+              "title": "should handle form layout on different screen sizes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 15000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit-silent",
+                  "projectName": "webkit-silent",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 383,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T09:34:24.483Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "68833bfb7a01a66a4f98-c11433a3f3a43885d636",
+              "file": "responsive.spec.js",
+              "line": 38,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-06T09:34:19.525Z",
+    "duration": 5364.737,
+    "expected": 19,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
