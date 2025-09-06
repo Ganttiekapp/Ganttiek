@@ -65,20 +65,20 @@
   },
   "suites": [
     {
-      "title": "gantt-zoom-disabled.spec.js",
-      "file": "gantt-zoom-disabled.spec.js",
+      "title": "gantt-dependencies.spec.js",
+      "file": "gantt-dependencies.spec.js",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Gantt Chart Zoom Disabled",
-          "file": "gantt-zoom-disabled.spec.js",
+          "title": "Gantt Chart Dependencies",
+          "file": "gantt-dependencies.spec.js",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should verify zoom functionality is disabled",
+              "title": "should verify dependency arrows are rendered",
               "ok": true,
               "tags": [],
               "tests": [
@@ -93,28 +93,22 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1266,
+                      "duration": 950,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "✅ Zoom buttons are disabled\n"
+                          "text": "✅ Found 3 dependency paths\n"
                         },
                         {
-                          "text": "✅ Zoom status is hidden\n"
+                          "text": "✅ Found 3 dependency arrows\n"
                         },
                         {
-                          "text": "✅ Wheel events are allowed for normal page scrolling\n"
-                        },
-                        {
-                          "text": "📊 Chart dimensions: 1200x600px\n"
-                        },
-                        {
-                          "text": "✅ Gantt chart zoom is successfully disabled!\n"
+                          "text": "📊 Total dependency elements: 6\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-09-06T17:37:23.816Z",
+                      "startTime": "2025-09-06T17:49:49.460Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -122,9 +116,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "6d54633d1780dc51b300-bd2338ce197b837cc73b",
-              "file": "gantt-zoom-disabled.spec.js",
-              "line": 4,
+              "id": "4cfab5e6f3cf4e48e790-eed92d29d3e9673ec8e1",
+              "file": "gantt-dependencies.spec.js",
+              "line": 92,
               "column": 3
             }
           ]
@@ -134,8 +128,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-09-06T17:37:23.363Z",
-    "duration": 2045.689,
+    "startTime": "2025-09-06T17:49:49.118Z",
+    "duration": 1470.8359999999998,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

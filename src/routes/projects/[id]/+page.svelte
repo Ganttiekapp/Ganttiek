@@ -18,31 +18,87 @@
   let success = '';
   let availableParentTasks = [];
 
-  // Transform tasks for Gantt chart
-  $: ganttTasks = tasks.map(task => ({
-    id: task.id,
-    name: task.name,
-    description: task.description || '',
-    startDate: new Date(task.start_date),
-    endDate: new Date(task.end_date),
-    progress: task.progress || 0,
-    status: task.status || 'todo',
-    priority: task.priority || 'medium',
-    resourceId: null,
-    parentId: null,
-    children: [],
-    dependencies: [],
-    milestones: [],
-    isCritical: false,
-    slack: 0,
-    earlyStart: new Date(task.start_date),
-    earlyFinish: new Date(task.end_date),
-    lateStart: new Date(task.start_date),
-    lateFinish: new Date(task.end_date),
-    createdAt: new Date(task.created_at),
-    updatedAt: new Date(task.updated_at),
-    customFields: {}
-  }));
+  // Transform tasks for Gantt chart with automatic dependency positioning
+  $: ganttTasks = (() => {
+    const transformedTasks = tasks.map(task => ({
+      id: task.id,
+      name: task.name,
+      description: task.description || '',
+      startDate: new Date(task.start_date),
+      endDate: new Date(task.end_date),
+      progress: task.progress || 0,
+      status: task.status || 'todo',
+      priority: task.priority || 'medium',
+      resourceId: null,
+      parentId: null,
+      children: [],
+      dependencies: task.dependencies || [],
+      milestones: [],
+      isCritical: false,
+      slack: 0,
+      earlyStart: new Date(task.start_date),
+      earlyFinish: new Date(task.end_date),
+      lateStart: new Date(task.start_date),
+      lateFinish: new Date(task.end_date),
+      createdAt: new Date(task.created_at),
+      updatedAt: new Date(task.updated_at),
+      customFields: {}
+    }));
+
+    // Auto-position dependent tasks to start the day after their parent tasks
+    transformedTasks.forEach(task => {
+      if (task.dependencies && task.dependencies.length > 0) {
+        let latestEndDate = task.startDate;
+        
+        // Find the latest end date among dependencies
+        task.dependencies.forEach(depId => {
+          const parentTask = transformedTasks.find(t => t.id === depId);
+          if (parentTask) {
+            const parentEndDate = new Date(parentTask.endDate);
+            if (parentEndDate > latestEndDate) {
+              latestEndDate = parentEndDate;
+            }
+          }
+        });
+        
+        // Set task to start the day after the latest dependency ends
+        const newStartDate = new Date(latestEndDate);
+        newStartDate.setDate(newStartDate.getDate() + 1);
+        
+        // Calculate new end date maintaining the same duration
+        const duration = task.endDate.getTime() - task.startDate.getTime();
+        const newEndDate = new Date(newStartDate.getTime() + duration);
+        
+        task.startDate = newStartDate;
+        task.endDate = newEndDate;
+        task.earlyStart = newStartDate;
+        task.earlyFinish = newEndDate;
+        task.lateStart = newStartDate;
+        task.lateFinish = newEndDate;
+      }
+    });
+
+    return transformedTasks;
+  })();
+
+  // Transform dependencies for Gantt chart
+  $: ganttDependencies = (() => {
+    const deps = [];
+    tasks.forEach(task => {
+      if (task.dependencies && task.dependencies.length > 0) {
+        task.dependencies.forEach(depId => {
+          deps.push({
+            id: `${task.id}-${depId}`,
+            from: depId,
+            to: task.id,
+            type: 'finish-to-start',
+            lag: 0
+          });
+        });
+      }
+    });
+    return deps;
+  })();
 
   let newTask = {
     name: '',
@@ -728,11 +784,11 @@
       {#if ganttTasks && ganttTasks.length > 0}
         <div class="gantt-section">
           <h2>Project Timeline</h2>
-          <p class="gantt-info">Showing {ganttTasks.length} tasks in Gantt chart</p>
-          <p class="gantt-help">💡 Right-click on tasks to edit, delete, or add dependencies. Right-click and drag to pan around the chart.</p>
+          <p class="gantt-info">Showing {ganttTasks.length} tasks and {ganttDependencies.length} dependencies in Gantt chart</p>
+          <p class="gantt-help">💡 Right-click on tasks to edit, delete, or add dependencies. Dependent tasks are automatically positioned the day after their parent tasks. Right-click and drag to pan around the chart.</p>
           <BananasGantt 
             tasks={ganttTasks}
-            dependencies={[]}
+            dependencies={ganttDependencies}
             resources={[]}
             theme="default"
             width={1200}
