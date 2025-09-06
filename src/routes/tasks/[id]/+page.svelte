@@ -12,6 +12,9 @@
   let saving = false;
   let error = '';
   let success = '';
+  let validationErrors = {};
+  let isEditing = false;
+  let originalData = {};
 
   let formData = {
     name: '',
@@ -66,6 +69,9 @@
           status: task.status || 'todo',
           progress: task.progress || 0
         };
+        
+        // Store original data for comparison
+        originalData = { ...formData };
       }
     } catch (err) {
       error = 'Failed to load task';
@@ -74,14 +80,37 @@
     }
   }
 
-  async function handleSubmit() {
+  function validateForm() {
+    validationErrors = {};
+    
     if (!formData.name.trim()) {
-      error = 'Task name is required';
-      return;
+      validationErrors.name = 'Task name is required';
+    } else if (formData.name.trim().length < 3) {
+      validationErrors.name = 'Task name must be at least 3 characters';
     }
-
+    
     if (!formData.project_id) {
-      error = 'Please select a project';
+      validationErrors.project_id = 'Please select a project';
+    }
+    
+    if (formData.start_date && formData.end_date && formData.start_date > formData.end_date) {
+      validationErrors.end_date = 'End date must be after start date';
+    }
+    
+    if (formData.progress < 0 || formData.progress > 100) {
+      validationErrors.progress = 'Progress must be between 0 and 100';
+    }
+    
+    return Object.keys(validationErrors).length === 0;
+  }
+
+  function hasChanges() {
+    return JSON.stringify(formData) !== JSON.stringify(originalData);
+  }
+
+  async function handleSubmit() {
+    if (!validateForm()) {
+      error = 'Please fix the validation errors below';
       return;
     }
 
@@ -107,16 +136,32 @@
         error = updateError.message;
       } else {
         task = data;
+        originalData = { ...formData };
         success = 'Task updated successfully!';
+        isEditing = false;
         setTimeout(() => {
-          goto('/tasks');
-        }, 1500);
+          success = '';
+        }, 3000);
       }
     } catch (err) {
       error = 'Failed to update task';
     } finally {
       saving = false;
     }
+  }
+
+  function startEditing() {
+    isEditing = true;
+    error = '';
+    success = '';
+  }
+
+  function cancelEditing() {
+    formData = { ...originalData };
+    validationErrors = {};
+    isEditing = false;
+    error = '';
+    success = '';
   }
 
   async function deleteTask() {
@@ -180,6 +225,11 @@
         <h1>{task?.name || 'Loading...'}</h1>
       </div>
       <div class="header-actions">
+        {#if !isEditing}
+          <button on:click={startEditing} class="btn btn-primary">
+            Edit Task
+          </button>
+        {/if}
         <button on:click={deleteTask} class="btn btn-danger">
           Delete Task
         </button>
@@ -251,7 +301,13 @@
 
       <!-- Edit Form -->
       <div class="edit-form">
-        <h2>Edit Task</h2>
+        <div class="form-header">
+          <h2>Edit Task</h2>
+          {#if hasChanges()}
+            <span class="unsaved-changes">● Unsaved changes</span>
+          {/if}
+        </div>
+        
         <form on:submit|preventDefault={handleSubmit}>
           <div class="form-row">
             <div class="form-group">
@@ -261,17 +317,31 @@
                 type="text"
                 bind:value={formData.name}
                 placeholder="Enter task name"
+                class:error={validationErrors.name}
+                disabled={!isEditing}
                 required
               />
+              {#if validationErrors.name}
+                <span class="error-message">{validationErrors.name}</span>
+              {/if}
             </div>
             <div class="form-group">
               <label for="project_id">Project *</label>
-              <select id="project_id" bind:value={formData.project_id} required>
+              <select 
+                id="project_id" 
+                bind:value={formData.project_id} 
+                class:error={validationErrors.project_id}
+                disabled={!isEditing}
+                required
+              >
                 <option value="">Select a project</option>
                 {#each projects as project (project.id)}
                   <option value={project.id}>{project.name}</option>
                 {/each}
               </select>
+              {#if validationErrors.project_id}
+                <span class="error-message">{validationErrors.project_id}</span>
+              {/if}
             </div>
           </div>
 
@@ -282,6 +352,7 @@
               bind:value={formData.description}
               placeholder="Enter task description (optional)"
               rows="4"
+              disabled={!isEditing}
             ></textarea>
           </div>
 
@@ -292,6 +363,7 @@
                 id="start_date"
                 type="date"
                 bind:value={formData.start_date}
+                disabled={!isEditing}
               />
             </div>
             <div class="form-group">
@@ -300,11 +372,16 @@
                 id="end_date"
                 type="date"
                 bind:value={formData.end_date}
+                class:error={validationErrors.end_date}
+                disabled={!isEditing}
               />
+              {#if validationErrors.end_date}
+                <span class="error-message">{validationErrors.end_date}</span>
+              {/if}
             </div>
             <div class="form-group">
               <label for="priority">Priority</label>
-              <select id="priority" bind:value={formData.priority}>
+              <select id="priority" bind:value={formData.priority} disabled={!isEditing}>
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
@@ -315,7 +392,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="status">Status</label>
-              <select id="status" bind:value={formData.status}>
+              <select id="status" bind:value={formData.status} disabled={!isEditing}>
                 <option value="todo">To Do</option>
                 <option value="in_progress">In Progress</option>
                 <option value="completed">Completed</option>
@@ -329,16 +406,30 @@
                 min="0"
                 max="100"
                 bind:value={formData.progress}
+                class:error={validationErrors.progress}
+                disabled={!isEditing}
               />
+              {#if validationErrors.progress}
+                <span class="error-message">{validationErrors.progress}</span>
+              {/if}
             </div>
           </div>
 
           <div class="form-actions">
-            <button type="submit" disabled={saving} class="btn btn-primary">
-              {saving ? 'Saving...' : 'Save Changes'}
-            </button>
+            {#if isEditing}
+              <button type="submit" disabled={saving || !hasChanges()} class="btn btn-primary">
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+              <button type="button" on:click={cancelEditing} class="btn btn-secondary">
+                Cancel
+              </button>
+            {:else}
+              <button type="button" on:click={startEditing} class="btn btn-primary">
+                Start Editing
+              </button>
+            {/if}
             <button type="button" on:click={() => goto('/tasks')} class="btn btn-secondary">
-              Cancel
+              Back to Tasks
             </button>
           </div>
         </form>
@@ -466,9 +557,25 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
-  .edit-form h2 {
-    margin: 0 0 1.5rem 0;
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .form-header h2 {
+    margin: 0;
     color: #333;
+    font-size: 1.25rem;
+  }
+
+  .unsaved-changes {
+    color: #ffc107;
+    font-weight: 600;
+    font-size: 0.9rem;
   }
 
   .form-row {
@@ -505,6 +612,24 @@
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+
+  .form-group input.error, .form-group select.error, .form-group textarea.error {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+  }
+
+  .form-group input:disabled, .form-group select:disabled, .form-group textarea:disabled {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    cursor: not-allowed;
+  }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
   }
 
   .form-actions {

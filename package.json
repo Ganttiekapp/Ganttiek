@@ -15,7 +15,9 @@
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
-    "test:install": "playwright install"
+    "test:install": "playwright install",
+    "migrate": "node migrations/run_migration.js",
+    "migrate:rollback": "node migrations/run_migration.js 001_add_task_dependencies_rollback.sql"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",

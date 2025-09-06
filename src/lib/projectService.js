@@ -203,4 +203,116 @@ export class ProjectService {
     
     return { error };
   }
+
+  // Task dependency methods
+  static async getTaskDependencies(taskId, userId) {
+    const { data, error } = await supabase
+      .from('task_dependencies')
+      .select(`
+        *,
+        depends_on_task:tasks!task_dependencies_depends_on_task_id_fkey(*)
+      `)
+      .eq('task_id', taskId);
+    
+    return { data, error };
+  }
+
+  static async getTasksThatDependOn(taskId, userId) {
+    const { data, error } = await supabase
+      .from('task_dependencies')
+      .select(`
+        *,
+        task:tasks!task_dependencies_task_id_fkey(*)
+      `)
+      .eq('depends_on_task_id', taskId);
+    
+    return { data, error };
+  }
+
+  static async getAvailableDependencyTasks(projectId, currentTaskId, userId) {
+    // Get all tasks in the project except the current task (to prevent self-reference)
+    let query = supabase
+      .from('tasks')
+      .select('id, name')
+      .eq('project_id', projectId)
+      .eq('user_id', userId);
+    
+    if (currentTaskId) {
+      query = query.neq('id', currentTaskId);
+    }
+    
+    const { data, error } = await query.order('name', { ascending: true });
+    
+    // Filter out tasks that would create circular dependencies
+    const filteredData = data?.filter(task => {
+      if (!currentTaskId) return true;
+      return !wouldCreateCircularDependency(task.id, currentTaskId, data);
+    }) || [];
+    
+    return { data: filteredData, error };
+  }
+
+  static async updateTaskDependencies(taskId, dependencyTaskIds, userId) {
+    // First, remove all existing dependencies for this task
+    const { error: deleteError } = await supabase
+      .from('task_dependencies')
+      .delete()
+      .eq('task_id', taskId);
+    
+    if (deleteError) {
+      return { error: deleteError };
+    }
+    
+    // Then, add new dependencies if any
+    if (dependencyTaskIds && dependencyTaskIds.length > 0) {
+      const dependencies = dependencyTaskIds.map(depId => ({
+        task_id: taskId,
+        depends_on_task_id: depId
+      }));
+      
+      const { data, error } = await supabase
+        .from('task_dependencies')
+        .insert(dependencies)
+        .select();
+      
+      return { data, error };
+    }
+    
+    return { data: [], error: null };
+  }
+
+  static async getTaskWithDependencies(taskId, userId) {
+    const { data, error } = await supabase
+      .from('tasks')
+      .select(`
+        *,
+        dependencies:task_dependencies(
+          *,
+          depends_on_task:tasks!task_dependencies_depends_on_task_id_fkey(*)
+        )
+      `)
+      .eq('id', taskId)
+      .eq('user_id', userId)
+      .single();
+    
+    return { data, error };
+  }
+}
+
+// Helper function to check for circular dependencies
+function wouldCreateCircularDependency(newParentId, childTaskId, allTasks) {
+  let currentTaskId = newParentId;
+  const visited = new Set();
+  
+  while (currentTaskId && !visited.has(currentTaskId)) {
+    if (currentTaskId === childTaskId) {
+      return true; // Circular dependency detected
+    }
+    
+    visited.add(currentTaskId);
+    const parentTask = allTasks.find(task => task.id === currentTaskId);
+    currentTaskId = parentTask?.parent_task_id;
+  }
+  
+  return false;
 }

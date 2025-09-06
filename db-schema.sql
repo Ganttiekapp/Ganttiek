@@ -40,8 +40,22 @@ CREATE TABLE public.tasks (
   progress integer DEFAULT 0 CHECK (progress >= 0 AND progress <= 100),
   project_id uuid NOT NULL,
   user_id uuid NOT NULL,
-  dependencies ARRAY,
+  dependencies uuid[] DEFAULT '{}',
+  priority text DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high')),
+  status text DEFAULT 'todo' CHECK (status IN ('todo', 'in_progress', 'completed')),
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now(),
   CONSTRAINT tasks_pkey PRIMARY KEY (id)
+);
+
+-- Create a separate table for task dependencies to handle multiple dependencies properly
+CREATE TABLE public.task_dependencies (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  task_id uuid NOT NULL,
+  depends_on_task_id uuid NOT NULL,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT task_dependencies_pkey PRIMARY KEY (id),
+  CONSTRAINT task_dependencies_task_id_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(id) ON DELETE CASCADE,
+  CONSTRAINT task_dependencies_depends_on_task_id_fkey FOREIGN KEY (depends_on_task_id) REFERENCES public.tasks(id) ON DELETE CASCADE,
+  CONSTRAINT task_dependencies_unique UNIQUE (task_id, depends_on_task_id)
 );

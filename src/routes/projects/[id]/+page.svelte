@@ -11,6 +11,11 @@
   let loading = true;
   let error = '';
   let showTaskForm = false;
+  let editingTaskId = null;
+  let editingTask = {};
+  let validationErrors = {};
+  let success = '';
+  let availableParentTasks = [];
 
   let newTask = {
     name: '',
@@ -19,7 +24,8 @@
     end_date: '',
     priority: 'medium',
     status: 'todo',
-    progress: 0
+    progress: 0,
+    dependencies: []
   };
 
   onMount(async () => {
@@ -52,6 +58,9 @@
 
       project = projectResult.data;
       tasks = tasksResult.data || [];
+      
+      // Load available parent tasks for dependency selection
+      loadAvailableParentTasks();
     } catch (err) {
       error = 'Failed to load project';
     } finally {
@@ -59,14 +68,59 @@
     }
   }
 
-  async function createTask() {
-    if (!newTask.name.trim()) {
-      error = 'Task name is required';
-      return;
-    }
+  function loadAvailableParentTasks(currentTaskId = null) {
+    // Use existing tasks array to populate available parent tasks
+    availableParentTasks = tasks.filter(task => {
+      // Don't include the current task being edited
+      if (currentTaskId && task.id === currentTaskId) return false;
+      // Don't include tasks that would create circular dependencies
+      if (currentTaskId && wouldCreateCircularDependency(task.id, currentTaskId, tasks)) return false;
+      return true;
+    });
+  }
 
-    if (newTask.start_date && newTask.end_date && newTask.start_date > newTask.end_date) {
-      error = 'End date must be after start date';
+  function wouldCreateCircularDependency(newParentId, childTaskId, allTasks) {
+    let currentTaskId = newParentId;
+    const visited = new Set();
+    
+    while (currentTaskId && !visited.has(currentTaskId)) {
+      if (currentTaskId === childTaskId) {
+        return true; // Circular dependency detected
+      }
+      
+      visited.add(currentTaskId);
+      const parentTask = allTasks.find(task => task.id === currentTaskId);
+      // For now, we'll use a simple check - in a real implementation,
+      // you'd need to check the task_dependencies table
+      currentTaskId = null; // Simplified for now
+    }
+    
+    return false;
+  }
+
+  function validateTaskForm(taskData) {
+    validationErrors = {};
+    
+    if (!taskData.name.trim()) {
+      validationErrors.name = 'Task name is required';
+    } else if (taskData.name.trim().length < 3) {
+      validationErrors.name = 'Task name must be at least 3 characters';
+    }
+    
+    if (taskData.start_date && taskData.end_date && taskData.start_date > taskData.end_date) {
+      validationErrors.end_date = 'End date must be after start date';
+    }
+    
+    if (taskData.progress < 0 || taskData.progress > 100) {
+      validationErrors.progress = 'Progress must be between 0 and 100';
+    }
+    
+    return Object.keys(validationErrors).length === 0;
+  }
+
+  async function createTask() {
+    if (!validateTaskForm(newTask)) {
+      error = 'Please fix the validation errors below';
       return;
     }
 
@@ -94,10 +148,14 @@
           end_date: '',
           priority: 'medium',
           status: 'todo',
-          progress: 0
+          progress: 0,
+          dependencies: []
         };
         showTaskForm = false;
         error = '';
+        validationErrors = {};
+        success = 'Task created successfully!';
+        setTimeout(() => success = '', 3000);
       }
     } catch (err) {
       error = 'Failed to create task';
@@ -133,7 +191,7 @@
   }
 
   async function deleteTask(taskId) {
-    if (!confirm('Are you sure you want to delete this task?')) {
+    if (!confirm('Are you sure you want to delete this task? This action cannot be undone.')) {
       return;
     }
 
@@ -144,9 +202,84 @@
         error = deleteError.message;
       } else {
         tasks = tasks.filter(t => t.id !== taskId);
+        success = 'Task deleted successfully!';
+        setTimeout(() => success = '', 3000);
       }
     } catch (err) {
       error = 'Failed to delete task';
+    }
+  }
+
+  function startEditTask(task) {
+    editingTaskId = task.id;
+    editingTask = {
+      name: task.name || '',
+      description: task.description || '',
+      start_date: task.start_date || '',
+      end_date: task.end_date || '',
+      priority: task.priority || 'medium',
+      status: task.status || 'todo',
+      progress: task.progress || 0,
+      dependencies: task.dependencies || []
+    };
+    validationErrors = {};
+    error = '';
+    // Load available parent tasks for this specific task
+    loadAvailableParentTasks(task.id);
+  }
+
+  function cancelEditTask() {
+    editingTaskId = null;
+    editingTask = {};
+    validationErrors = {};
+    error = '';
+  }
+
+  async function saveEditTask() {
+    if (!validateTaskForm(editingTask)) {
+      error = 'Please fix the validation errors below';
+      return;
+    }
+
+    try {
+      const updates = {
+        name: editingTask.name.trim(),
+        description: editingTask.description.trim() || null,
+        start_date: editingTask.start_date || null,
+        end_date: editingTask.end_date || null,
+        priority: editingTask.priority,
+        status: editingTask.status,
+        progress: editingTask.progress
+      };
+
+      const { data, error: updateError } = await ProjectService.updateTask(editingTaskId, updates, user.id);
+      
+      if (updateError) {
+        error = updateError.message;
+      } else {
+        tasks = tasks.map(t => t.id === editingTaskId ? data : t);
+        cancelEditTask();
+        success = 'Task updated successfully!';
+        setTimeout(() => success = '', 3000);
+      }
+    } catch (err) {
+      error = 'Failed to update task';
+    }
+  }
+
+  async function updateTaskStatus(taskId, status) {
+    try {
+      const { data, error: updateError } = await ProjectService.updateTaskStatus(taskId, status, user.id);
+      
+      if (updateError) {
+        error = updateError.message;
+      } else {
+        tasks = tasks.map(task => task.id === taskId ? data : task);
+        success = 'Task status updated!';
+        setTimeout(() => success = '', 2000);
+      }
+    } catch (err) {
+      error = 'Failed to update task status';
     }
   }
 
@@ -225,6 +358,10 @@
       <div class="error">
         {error}
       </div>
+    {:else if success}
+      <div class="success">
+        {success}
+      </div>
     {:else if project}
       <div class="project-info">
         <div class="project-details">
@@ -267,8 +404,12 @@
                     type="text"
                     bind:value={newTask.name}
                     placeholder="Enter task name"
+                    class:error={validationErrors.name}
                     required
                   />
+                  {#if validationErrors.name}
+                    <span class="error-message">{validationErrors.name}</span>
+                  {/if}
                 </div>
                 <div class="form-group">
                   <label for="task-progress">Progress (%)</label>
@@ -290,6 +431,26 @@
                   placeholder="Enter task description (optional)"
                   rows="3"
                 ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="task-dependencies">Task Dependencies</label>
+                <div class="dependency-selector">
+                  {#each availableParentTasks as parentTask (parentTask.id)}
+                    <label class="dependency-option">
+                      <input
+                        type="checkbox"
+                        bind:group={newTask.dependencies}
+                        value={parentTask.id}
+                      />
+                      <span class="dependency-name">{parentTask.name}</span>
+                    </label>
+                  {/each}
+                  {#if availableParentTasks.length === 0}
+                    <p class="no-dependencies">No other tasks available for dependencies</p>
+                  {/if}
+                </div>
+                <small class="form-help">Select tasks that must be completed before this task can start</small>
               </div>
               
               <div class="form-row">
@@ -327,39 +488,183 @@
           <div class="tasks-list">
             {#each tasks as task (task.id)}
               <div class="task-card">
-                <div class="task-header">
-                  <h4>{task.name}</h4>
-                  <div class="task-actions">
-                    <button on:click={() => deleteTask(task.id)} class="btn btn-danger btn-sm">
-                      Delete
-                    </button>
+                {#if editingTaskId === task.id}
+                  <!-- Edit Mode -->
+                  <div class="task-edit-form">
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label for="edit-name-{editingTaskId}">Task Name *</label>
+                        <input
+                          id="edit-name-{editingTaskId}"
+                          type="text"
+                          bind:value={editingTask.name}
+                          class:error={validationErrors.name}
+                          placeholder="Enter task name"
+                        />
+                        {#if validationErrors.name}
+                          <span class="error-message">{validationErrors.name}</span>
+                        {/if}
+                      </div>
+                      <div class="form-group">
+                        <label for="edit-priority-{editingTaskId}">Priority</label>
+                        <select id="edit-priority-{editingTaskId}" bind:value={editingTask.priority}>
+                          <option value="low">Low</option>
+                          <option value="medium">Medium</option>
+                          <option value="high">High</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="edit-description-{editingTaskId}">Description</label>
+                      <textarea
+                        id="edit-description-{editingTaskId}"
+                        bind:value={editingTask.description}
+                        placeholder="Enter task description (optional)"
+                        rows="2"
+                      ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="edit-dependencies-{editingTaskId}">Task Dependencies</label>
+                      <div class="dependency-selector">
+                        {#each availableParentTasks as parentTask (parentTask.id)}
+                          <label class="dependency-option">
+                            <input
+                              type="checkbox"
+                              bind:group={editingTask.dependencies}
+                              value={parentTask.id}
+                            />
+                            <span class="dependency-name">{parentTask.name}</span>
+                          </label>
+                        {/each}
+                        {#if availableParentTasks.length === 0}
+                          <p class="no-dependencies">No other tasks available for dependencies</p>
+                        {/if}
+                      </div>
+                      <small class="form-help">Select tasks that must be completed before this task can start</small>
+                    </div>
+                    
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label for="edit-start-{editingTaskId}">Start Date</label>
+                        <input id="edit-start-{editingTaskId}" type="date" bind:value={editingTask.start_date} />
+                      </div>
+                      <div class="form-group">
+                        <label for="edit-end-{editingTaskId}">End Date</label>
+                        <input 
+                          id="edit-end-{editingTaskId}"
+                          type="date" 
+                          bind:value={editingTask.end_date}
+                          class:error={validationErrors.end_date}
+                        />
+                        {#if validationErrors.end_date}
+                          <span class="error-message">{validationErrors.end_date}</span>
+                        {/if}
+                      </div>
+                    </div>
+                    
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label for="edit-status-{editingTaskId}">Status</label>
+                        <select id="edit-status-{editingTaskId}" bind:value={editingTask.status}>
+                          <option value="todo">To Do</option>
+                          <option value="in_progress">In Progress</option>
+                          <option value="completed">Completed</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="edit-progress-{editingTaskId}">Progress (%)</label>
+                        <input
+                          id="edit-progress-{editingTaskId}"
+                          type="number"
+                          min="0"
+                          max="100"
+                          bind:value={editingTask.progress}
+                          class:error={validationErrors.progress}
+                        />
+                        {#if validationErrors.progress}
+                          <span class="error-message">{validationErrors.progress}</span>
+                        {/if}
+                      </div>
+                    </div>
+                    
+                    <div class="edit-actions">
+                      <button on:click={saveEditTask} class="btn btn-success btn-sm">
+                        Save
+                      </button>
+                      <button on:click={cancelEditTask} class="btn btn-secondary btn-sm">
+                        Cancel
+                      </button>
+                    </div>
                   </div>
-                </div>
-                
-                {#if task.description}
-                  <p class="task-description">{task.description}</p>
+                {:else}
+                  <!-- View Mode -->
+                  <div class="task-header">
+                    <div class="task-title">
+                      <input
+                        type="checkbox"
+                        checked={(task.progress || 0) === 100}
+                        on:change={() => toggleTaskComplete(task)}
+                        class="task-checkbox"
+                      />
+                      <h4 class="{(task.progress || 0) === 100 ? 'completed' : ''}">{task.name || 'Untitled Task'}</h4>
+                    </div>
+                    <div class="task-actions">
+                      <span class="priority" style="background-color: {getPriorityColor(task.priority || 'medium')}">
+                        {task.priority || 'medium'}
+                      </span>
+                      <span class="status" style="background-color: {getStatusColor(task.status || 'todo')}">
+                        {(task.status || 'todo').replace('_', ' ')}
+                      </span>
+                      <button on:click={() => startEditTask(task)} class="btn btn-primary btn-sm">
+                        Edit
+                      </button>
+                      <button on:click={() => deleteTask(task.id)} class="btn btn-danger btn-sm">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
                 {/if}
                 
-                <div class="task-meta">
-                  <div class="task-dates">
-                    <span><strong>Start:</strong> {formatDate(task.start_date)}</span>
-                    <span><strong>End:</strong> {formatDate(task.end_date)}</span>
-                  </div>
+                {#if editingTaskId !== task.id}
+                  {#if task.description}
+                    <p class="task-description">{task.description}</p>
+                  {/if}
                   
-                  <div class="task-progress">
-                    <label for="progress-{task.id}">Progress:</label>
-                    <input
-                      id="progress-{task.id}"
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={task.progress}
-                      on:input={(e) => updateTaskProgress(task.id, parseInt(e.target.value))}
-                      class="progress-slider"
-                    />
-                    <span class="progress-value">{task.progress}%</span>
+                  <div class="task-meta">
+                    <div class="task-dates">
+                      <span><strong>Start:</strong> {formatDate(task.start_date)}</span>
+                      <span><strong>End:</strong> {formatDate(task.end_date)}</span>
+                      {#if task.dependencies && task.dependencies.length > 0}
+                        <span class="dependency-info">
+                          <strong>Depends on:</strong> 
+                          {#each task.dependencies as depId}
+                            {#each tasks as parentTask (parentTask.id)}
+                              {#if parentTask.id === depId}
+                                <span class="dependency-badge">{parentTask.name}</span>
+                              {/if}
+                            {/each}
+                          {/each}
+                        </span>
+                      {/if}
+                    </div>
+                    
+                    <div class="task-progress">
+                      <label for="progress-{task.id}">Progress:</label>
+                      <input
+                        id="progress-{task.id}"
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={task.progress || 0}
+                        on:input={(e) => updateTaskProgress(task.id, parseInt(e.target.value))}
+                        class="progress-slider"
+                      />
+                      <span class="progress-value">{task.progress || 0}%</span>
+                    </div>
                   </div>
-                </div>
+                {/if}
               </div>
             {/each}
           </div>
@@ -628,6 +933,178 @@
 
   .btn-danger:hover {
     background-color: #c82333;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+  }
+
+  .success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid #c3e6cb;
+  }
+
+  .task-edit-form {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #007bff;
+    margin-bottom: 1rem;
+  }
+
+  .task-edit-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .task-edit-form .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .task-edit-form .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+  }
+
+  .task-edit-form .form-group input,
+  .task-edit-form .form-group select,
+  .task-edit-form .form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+  }
+
+  .task-edit-form .form-group input:focus,
+  .task-edit-form .form-group select:focus,
+  .task-edit-form .form-group textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+
+  .task-edit-form .form-group input.error,
+  .task-edit-form .form-group select.error,
+  .task-edit-form .form-group textarea.error {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+  }
+
+  .error-message {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+
+  .edit-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+  }
+
+  .task-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .task-checkbox {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+  }
+
+  .task-title h4.completed {
+    text-decoration: line-through;
+    color: #6c757d;
+  }
+
+  .dependency-info {
+    color: #6c757d;
+    font-size: 0.9rem;
+    display: block;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+    border-left: 3px solid #007bff;
+  }
+
+  .form-help {
+    color: #6c757d;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+
+  .dependency-selector {
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .dependency-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+  }
+
+  .dependency-option:hover {
+    background-color: #e9ecef;
+  }
+
+  .dependency-option input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .dependency-name {
+    font-size: 0.9rem;
+    color: #333;
+  }
+
+  .no-dependencies {
+    color: #6c757d;
+    font-style: italic;
+    margin: 0;
+    padding: 0.5rem;
+    text-align: center;
+  }
+
+  .dependency-badge {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 0.125rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    margin: 0.125rem;
   }
 
   @media (max-width: 768px) {

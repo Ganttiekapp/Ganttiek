@@ -24,9 +24,6 @@
       <a href="/projects" class="nav-link {isActive('/projects') ? 'active' : ''}">
         Projects
       </a>
-      <a href="/tasks" class="nav-link {isActive('/tasks') ? 'active' : ''}">
-        Tasks
-      </a>
     </div>
     
     <div class="nav-user">

@@ -3,6 +3,7 @@
   import { AuthService } from '$lib/auth.js';
   import { ProjectService } from '$lib/projectService.js';
   import { goto } from '$app/navigation';
+  import TaskEditModal from '$lib/components/TaskEditModal.svelte';
 
   let user = null;
   let tasks = [];
@@ -10,6 +11,10 @@
   let error = '';
   let activeTab = 'all';
   let showTaskForm = false;
+  let editingTaskId = null;
+  let editingTask = {};
+  let showEditModal = false;
+  let modalTask = null;
 
   let newTask = {
     name: '',
@@ -167,6 +172,63 @@
     } catch (err) {
       error = 'Failed to delete task';
     }
+  }
+
+  function startInlineEdit(task) {
+    editingTaskId = task.id;
+    editingTask = {
+      name: task.name,
+      priority: task.priority,
+      status: task.status,
+      progress: task.progress
+    };
+  }
+
+  function cancelInlineEdit() {
+    editingTaskId = null;
+    editingTask = {};
+  }
+
+  async function saveInlineEdit() {
+    if (!editingTask.name.trim()) {
+      error = 'Task name is required';
+      return;
+    }
+
+    try {
+      const updates = {
+        name: editingTask.name.trim(),
+        priority: editingTask.priority,
+        status: editingTask.status,
+        progress: editingTask.progress
+      };
+
+      const { data, error: updateError } = await ProjectService.updateTask(editingTaskId, updates, user.id);
+      
+      if (updateError) {
+        error = updateError.message;
+      } else {
+        tasks = tasks.map(t => t.id === editingTaskId ? data : t);
+        cancelInlineEdit();
+      }
+    } catch (err) {
+      error = 'Failed to update task';
+    }
+  }
+
+  function openEditModal(task) {
+    modalTask = task;
+    showEditModal = true;
+  }
+
+  function closeEditModal() {
+    showEditModal = false;
+    modalTask = null;
+  }
+
+  function handleTaskUpdated(updatedTask) {
+    tasks = tasks.map(t => t.id === updatedTask.id ? updatedTask : t);
+    closeEditModal();
   }
 
   function formatDate(dateString) {
@@ -360,15 +422,39 @@
                     on:change={() => toggleTaskComplete(task)}
                     class="task-checkbox"
                   />
-                  <h4 class="{task.progress === 100 ? 'completed' : ''}">{task.name}</h4>
+                  {#if editingTaskId === task.id}
+                    <input
+                      type="text"
+                      bind:value={editingTask.name}
+                      class="inline-edit-input"
+                      placeholder="Task name"
+                    />
+                  {:else}
+                    <h4 class="{task.progress === 100 ? 'completed' : ''}">{task.name}</h4>
+                  {/if}
                 </div>
                 <div class="task-actions">
-                  <span class="priority" style="background-color: {getPriorityColor(task.priority)}">
-                    {task.priority}
-                  </span>
-                  <button on:click={() => deleteTask(task.id)} class="btn btn-danger btn-sm">
-                    Delete
-                  </button>
+                  {#if editingTaskId === task.id}
+                    <button on:click={saveInlineEdit} class="btn btn-success btn-sm">
+                      Save
+                    </button>
+                    <button on:click={cancelInlineEdit} class="btn btn-secondary btn-sm">
+                      Cancel
+                    </button>
+                  {:else}
+                    <span class="priority" style="background-color: {getPriorityColor(task.priority)}">
+                      {task.priority}
+                    </span>
+                    <button on:click={() => openEditModal(task)} class="btn btn-primary btn-sm">
+                      Quick Edit
+                    </button>
+                    <button on:click={() => startInlineEdit(task)} class="btn btn-secondary btn-sm">
+                      Inline Edit
+                    </button>
+                    <button on:click={() => deleteTask(task.id)} class="btn btn-danger btn-sm">
+                      Delete
+                    </button>
+                  {/if}
                 </div>
               </div>
               
@@ -399,6 +485,15 @@
     {/if}
   </main>
 </div>
+
+<!-- Task Edit Modal -->
+<TaskEditModal 
+  bind:isOpen={showEditModal}
+  task={modalTask}
+  {projects}
+  on:close={closeEditModal}
+  on:taskUpdated={handleTaskUpdated}
+/>
 
 <style>
   .tasks-container {
@@ -697,6 +792,33 @@
 
   .btn-danger:hover {
     background-color: #c82333;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+  }
+
+  .inline-edit-input {
+    border: 1px solid #007bff;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    background: white;
+    color: #333;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .inline-edit-input:focus {
+    outline: none;
+    border-color: #0056b3;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
 
   @media (max-width: 768px) {
