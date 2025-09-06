@@ -238,6 +238,7 @@
   }
 
   function startEditTask(task) {
+    console.log('🍌 Starting edit for task:', task.id, task.name);
     editingTaskId = task.id;
     editingTask = {
       name: task.name || '',
@@ -253,6 +254,7 @@
     error = '';
     // Load available parent tasks for this specific task
     loadAvailableParentTasks(task.id);
+    console.log('🍌 Edit form should now be visible for task:', task.id);
   }
 
   function cancelEditTask() {
@@ -264,32 +266,26 @@
 
   // Handle task editing from Gantt chart
   function handleGanttTaskEdit(event) {
+    console.log('🍌 Gantt editTask event received:', event);
     const taskId = event.taskId;
     const task = tasks.find(t => t.id === taskId);
+    console.log('🍌 Found task:', task);
+    
     if (task) {
-      editingTaskId = taskId;
-      editingTask = {
-        name: task.name,
-        description: task.description || '',
-        start_date: task.start_date,
-        end_date: task.end_date,
-        priority: task.priority || 'medium',
-        status: task.status || 'todo',
-        progress: task.progress || 0,
-        dependencies: task.dependencies || []
-      };
-      showTaskForm = true;
-      validationErrors = {};
-      success = '';
-      // Load available parent tasks for this specific task
-      loadAvailableParentTasks(task.id);
+      // Use the existing startEditTask function instead of duplicating logic
+      startEditTask(task);
+      console.log('🍌 Task editing form opened for task:', taskId);
+    } else {
+      console.error('🍌 Task not found for ID:', taskId);
     }
   }
 
   // Handle task deletion from Gantt chart
   async function handleGanttTaskDelete(event) {
+    console.log('🍌 Gantt taskDeleted event received:', event);
     const taskId = event.taskId;
     await deleteTask(taskId);
+    console.log('🍌 Task deleted:', taskId);
   }
 
   async function saveEditTask() {

@@ -211,6 +211,14 @@
         dispatch('dependencyCreated', event.detail);
       });
       
+      container.addEventListener('editTask', (event) => {
+        dispatch('editTask', event.detail);
+      });
+      
+      container.addEventListener('taskDeleted', (event) => {
+        dispatch('taskDeleted', event.detail);
+      });
+      
       container.addEventListener('taskSelected', (event) => {
         selectedTasks = interactions.getSelectedTasks();
         dispatch('taskSelected', event.detail);
